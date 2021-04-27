@@ -12,6 +12,8 @@ tf.disable_v2_behavior()
 
 os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
 
+graphno,pertseed = int(sys.argv[2]),int(sys.argv[3])
+
 def K_prop(V):
 
     V = V-(-50)
@@ -250,7 +252,7 @@ def dXdt(X, t): # X is the state vector
     return out
 
 
-metadata = np.load('__simcache__/metadata.npy',allow_pickle=True).item()
+metadata = np.load(f'__simcache__/metadata_{graphno}_{pertseed}.npy',allow_pickle=True).item()
 
 sim_res = metadata['sim_res']
 
@@ -347,10 +349,10 @@ g_ach = np.divide(np.array(g_ach),np.sum(ach_mat,axis=1),where=np.sum(ach_mat,ax
 G_sgaba = np.divide(np.array(G_sgaba),np.sum(sgaba_mat,axis=1),where=np.sum(sgaba_mat,axis=1)!=0)
 g_fgaba = np.divide(np.array(g_fgaba),np.sum(fgaba_mat,axis=1),where=np.sum(fgaba_mat,axis=1)!=0)
 
-t = np.load("__simcache__/time.npy")[int(sys.argv[1])]
-current_input = np.load("__simcache__/current_input.npy")
+t = np.load(f"__simcache__/time_{graphno}_{pertseed}.npy")[int(sys.argv[1])]
+current_input = np.load(f"__simcache__/current_input_{graphno}_{pertseed}.npy")
 
-state_vector = np.load("__simcache__/state_vector.npy")
+state_vector = np.load(f"__simcache__/state_vector_{graphno}_{pertseed}.npy")
 
 n_batch = 1
 t_batch = np.array_split(t,n_batch)
@@ -378,5 +380,5 @@ for n,i in tqdm(enumerate(t_batch)):
 state = np.concatenate(states)
 print("Completed. Total Execution Time:",np.round(time.time()-t_,3),"secs")
 
-np.save("__simcache__/state_vector.npy",state_vector)
-np.save(f"__simoutput__/state_{sys.argv[1]}.npy",state)
+np.save(f"__simcache__/state_vector_{graphno}_{pertseed}.npy",state_vector)
+np.save(f"__simoutput__/state_{sys.argv[1]}_{graphno}_{pertseed}.npy",state)
