@@ -69,7 +69,7 @@ t = np.arange(0,sim_time,sim_res)
 current_input = np.ones((n_n,t.shape[0]-int(2*buffer/sim_res)))
 for i in range(len(v)):
     current_input[p_n:,i*width:(i+1)*width]=0.0735*current_input[p_n:,i*width:(i+1)*width]*tfilter_base
-    current_input[:p_n,i*width:(i+1)*width]+= 0.20*(current_input[:p_n,i*width:(i+1)*width].T*v[i][:p_n]).T*tfilter - current_input[:p_n,i*width:(i+1)*width]
+    current_input[:p_n,i*width:(i+1)*width]+= 0.21*(current_input[:p_n,i*width:(i+1)*width].T*v[i][:p_n]).T*tfilter - current_input[:p_n,i*width:(i+1)*width]
 current_input = np.concatenate([np.zeros((current_input.shape[0],int(buffer/sim_res))),current_input,np.zeros((current_input.shape[0],int(buffer/sim_res)))],axis=1)
 np.random.seed()
 current_input += 0.05*current_input*np.random.normal(size=current_input.shape)+ 0.001*np.random.normal(size=current_input.shape)

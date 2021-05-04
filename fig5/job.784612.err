@@ -1,0 +1,780 @@
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 2021-05-04 20:41:52.667832: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 20:41:52.672285: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 20:41:52.672427: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x557f468a63c0 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 20:41:52.672455: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 2021-05-04 20:41:52.802249: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 20:41:52.807187: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 20:41:52.807314: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x564b6496ec70 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 20:41:52.807341: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 2021-05-04 20:41:52.823930: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 20:41:52.828896: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 20:41:52.829041: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x5653da37cdd0 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 20:41:52.829070: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 2021-05-04 20:41:52.831286: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 20:41:52.835829: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 20:41:52.835953: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x5560470de240 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 20:41:52.835982: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 2021-05-04 20:41:52.911971: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 20:41:52.916723: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 20:41:52.916877: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x56545db55f40 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 20:41:52.916910: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 2021-05-04 20:41:52.936209: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 20:41:52.936586: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 20:41:52.941167: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 20:41:52.941308: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x560f2e9dfb90 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 20:41:52.941340: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 2021-05-04 20:41:52.941404: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 20:41:52.941548: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x55b6e8a7b350 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 20:41:52.941578: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 2021-05-04 20:41:52.986042: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 20:41:52.991362: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 20:41:52.991650: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x557d81de0280 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 20:41:52.991683: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 2021-05-04 20:41:52.991867: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 20:41:52.996679: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 20:41:52.996818: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x55f379e04a70 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 20:41:52.996847: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 2021-05-04 20:41:54.021435: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 20:41:54.026610: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 20:41:54.026839: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x5646eceea360 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 20:41:54.026907: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 1it [01:02, 62.37s/it]2it [02:05, 62.52s/it]3it [03:10, 63.26s/it]4it [04:16, 64.10s/it]4it [04:16, 64.07s/it]
+0: 1it [01:02, 62.51s/it]2it [02:06, 62.86s/it]3it [03:11, 63.66s/it]4it [04:18, 64.53s/it]4it [04:18, 64.57s/it]
+0: 1it [01:03, 63.31s/it]2it [02:07, 63.59s/it]3it [03:13, 64.20s/it]4it [04:20, 65.16s/it]4it [04:20, 65.14s/it]
+0: 1it [01:03, 63.47s/it]2it [02:07, 63.75s/it]3it [03:14, 64.61s/it]4it [04:22, 65.50s/it]4it [04:22, 65.52s/it]
+0: 1it [05:14, 314.44s/it]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 1it [05:16, 316.42s/it]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 1it [05:18, 318.75s/it]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 1it [05:20, 320.24s/it]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 2021-05-04 20:46:15.438329: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 20:46:15.443114: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 20:46:15.443234: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x557acfdac580 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 20:46:15.443262: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 2021-05-04 20:46:15.742006: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 20:46:15.746785: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 20:46:15.746906: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x558986045b00 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 20:46:15.746943: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 2021-05-04 20:46:18.122401: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 20:46:18.127148: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 20:46:18.127279: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x55dfee52ec80 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 20:46:18.127308: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 2021-05-04 20:46:19.570167: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 20:46:19.575051: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 20:46:19.575311: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x55e9e523c630 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 20:46:19.575343: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 1it [01:07, 67.21s/it]2it [02:14, 67.38s/it]3it [03:24, 68.14s/it]4it [04:36, 69.12s/it]4it [04:36, 69.07s/it]
+0: 1it [05:34, 334.65s/it]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 1it [01:09, 69.79s/it]2it [02:20, 70.13s/it]3it [03:32, 70.77s/it]4it [04:47, 71.80s/it]4it [04:47, 71.80s/it]
+0: 1it [01:09, 69.89s/it]2it [02:20, 70.12s/it]3it [03:32, 70.81s/it]4it [04:47, 71.97s/it]4it [04:47, 71.91s/it]
+0: 2021-05-04 20:46:34.515362: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 20:46:34.520055: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 20:46:34.520184: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x562c20e0bef0 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 20:46:34.520215: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 1it [01:10, 70.60s/it]2it [02:24, 71.63s/it]3it [03:35, 71.48s/it]4it [04:50, 72.48s/it]4it [04:50, 72.64s/it]
+0: 1it [01:11, 71.06s/it]2it [02:22, 71.26s/it]3it [03:36, 72.00s/it]4it [04:51, 72.82s/it]4it [04:51, 72.81s/it]
+0: 1it [05:45, 345.35s/it]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 1it [05:45, 345.81s/it]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 1it [05:48, 348.73s/it]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 1it [05:49, 349.37s/it]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 2021-05-04 20:46:44.880852: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 20:46:44.885447: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 20:46:44.885575: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x562f934fff90 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 20:46:44.885605: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 2021-05-04 20:46:45.339107: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 20:46:45.343778: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 20:46:45.343907: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x55d8d7edf060 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 20:46:45.343936: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 2021-05-04 20:46:48.283317: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 20:46:48.288109: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 20:46:48.288255: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x55b4e2bd5c20 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 20:46:48.288286: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 2021-05-04 20:46:48.935050: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 20:46:48.939724: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 20:46:48.939853: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x558a0877e4d0 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 20:46:48.939884: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 1it [01:16, 76.31s/it]2it [02:33, 76.52s/it]3it [03:52, 77.40s/it]4it [05:12, 78.22s/it]4it [05:12, 78.23s/it]
+0: 1it [06:10, 370.60s/it]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 2021-05-04 20:47:11.878209: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 20:47:11.883720: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 20:47:11.883940: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x559edf568f10 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 20:47:11.884010: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 1it [01:03, 63.79s/it]2it [02:08, 64.08s/it]3it [03:14, 64.65s/it]4it [04:21, 65.24s/it]4it [04:21, 65.29s/it]
+0: 1it [01:04, 64.79s/it]2it [02:10, 65.00s/it]3it [03:16, 65.39s/it]4it [04:24, 66.09s/it]4it [04:24, 66.08s/it]
+0: 2it [09:42, 300.38s/it]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 1it [01:05, 65.04s/it]2it [02:10, 65.14s/it]3it [03:17, 65.67s/it]4it [04:25, 66.30s/it]4it [04:25, 66.28s/it]
+0: 2it [09:45, 302.19s/it]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 1it [01:04, 64.87s/it]2it [02:10, 65.22s/it]3it [03:18, 65.90s/it]4it [04:26, 66.52s/it]4it [04:26, 66.59s/it]
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 2it [09:48, 304.06s/it]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 2it [09:51, 305.47s/it]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 2021-05-04 20:50:42.955138: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 20:50:42.959963: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 20:50:42.960090: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x562f1638c600 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 20:50:42.960117: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 2021-05-04 20:50:44.725536: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 20:50:44.730035: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 20:50:44.730185: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x55e96c074e80 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 20:50:44.730214: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 2021-05-04 20:50:47.905298: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 20:50:47.910190: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 20:50:47.910441: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x55d0c850c850 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 20:50:47.910473: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 2021-05-04 20:50:50.607426: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 20:50:50.612253: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 20:50:50.612508: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x562d278b7de0 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 20:50:50.612541: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 1it [01:08, 68.66s/it]2it [02:18, 69.00s/it]3it [03:29, 69.49s/it]4it [04:40, 70.18s/it]4it [04:40, 70.22s/it]
+0: 2it [10:20, 320.04s/it]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 2021-05-04 20:51:20.027373: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 20:51:20.032104: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 20:51:20.032229: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x5581422bc6d0 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 20:51:20.032260: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 1it [01:11, 71.61s/it]2it [02:24, 71.92s/it]3it [03:38, 72.47s/it]4it [04:52, 73.08s/it]4it [04:52, 73.12s/it]
+0: 2it [10:42, 330.91s/it]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 1it [01:12, 72.46s/it]2it [02:26, 72.80s/it]3it [03:40, 73.37s/it]4it [04:56, 74.23s/it]4it [04:56, 74.25s/it]
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 2it [10:47, 332.58s/it]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 1it [01:12, 72.48s/it]2it [02:26, 73.01s/it]3it [03:42, 73.69s/it]4it [04:57, 74.35s/it]4it [04:57, 74.48s/it]
+0: 1it [01:13, 73.63s/it]2it [02:27, 73.84s/it]3it [03:42, 74.02s/it]4it [04:58, 74.78s/it]4it [04:58, 74.74s/it]
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 2021-05-04 20:51:42.068541: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 20:51:42.073200: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 20:51:42.073334: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x559d3cbbb1f0 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 20:51:42.073365: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 2it [10:52, 335.37s/it]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 2it [10:52, 335.24s/it]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 2021-05-04 20:51:47.067024: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 20:51:47.071703: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 20:51:47.071834: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x55e7a61070e0 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 20:51:47.071863: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 2021-05-04 20:51:51.622813: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 20:51:51.627757: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 20:51:51.627892: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x55f5f0dc6f00 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 20:51:51.627923: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 2021-05-04 20:51:51.748871: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 20:51:51.753646: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 20:51:51.753791: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x55ed7f768d30 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 20:51:51.753821: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 1it [01:17, 77.68s/it]2it [02:36, 77.97s/it]3it [03:56, 78.59s/it]4it [05:18, 79.60s/it]4it [05:18, 79.58s/it]
+0: 2it [11:33, 356.41s/it]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 2021-05-04 20:52:35.163922: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 20:52:35.169151: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 20:52:35.169394: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x55cdd64326d0 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 20:52:35.169459: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 1it [01:04, 64.16s/it]2it [02:09, 64.52s/it]3it [03:15, 65.00s/it]4it [04:23, 65.75s/it]4it [04:23, 65.79s/it]
+0: 1it [01:05, 65.03s/it]2it [02:10, 65.28s/it]3it [03:17, 65.68s/it]4it [04:25, 66.23s/it]4it [04:25, 66.26s/it]
+0: 3it [14:11, 291.13s/it]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 1it [01:04, 64.98s/it]2it [02:10, 65.20s/it]3it [03:17, 65.78s/it]4it [04:25, 66.43s/it]4it [04:25, 66.45s/it]
+0: 3it [14:15, 292.43s/it]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 1it [01:05, 65.10s/it]2it [02:11, 65.46s/it]3it [03:18, 66.05s/it]4it [04:26, 66.63s/it]4it [04:26, 66.70s/it]
+0: 3it [14:19, 293.99s/it]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 2021-05-04 20:55:12.597429: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 20:55:12.601891: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 20:55:12.602017: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x55910d2cc660 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 20:55:12.602051: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 3it [14:22, 295.27s/it]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 2021-05-04 20:55:14.350403: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 20:55:14.355320: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 20:55:14.355459: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x55a7802095a0 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 20:55:14.355490: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 2021-05-04 20:55:18.347612: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 20:55:18.352430: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 20:55:18.352553: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x563ae81ebb00 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 20:55:18.352585: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 2021-05-04 20:55:22.049740: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 20:55:22.054267: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 20:55:22.054411: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x56150e41ae10 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 20:55:22.054446: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 1it [01:08, 68.40s/it]2it [02:17, 68.76s/it]3it [03:28, 69.22s/it]4it [04:39, 69.82s/it]4it [04:39, 69.87s/it]
+0: 3it [15:04, 309.27s/it]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 2021-05-04 20:56:04.159524: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 20:56:04.164657: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 20:56:04.164787: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x563307a312a0 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 20:56:04.164824: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 1it [01:11, 71.63s/it]2it [02:23, 71.79s/it]3it [03:37, 72.47s/it]4it [04:52, 73.10s/it]4it [04:52, 73.10s/it]
+0: 3it [15:39, 320.80s/it]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 1it [01:12, 72.31s/it]2it [02:25, 72.51s/it]3it [03:39, 73.14s/it]4it [04:54, 73.70s/it]4it [04:54, 73.75s/it]
+0: 2021-05-04 20:56:39.439286: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 20:56:39.443821: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 20:56:39.443945: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x5612f7532630 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 20:56:39.443978: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 1it [01:13, 73.00s/it]2it [02:27, 73.44s/it]3it [03:42, 73.93s/it]4it [04:58, 74.68s/it]4it [04:58, 74.74s/it]
+0: 1it [01:12, 72.97s/it]2it [02:24, 72.48s/it]3it [03:41, 73.83s/it]4it [04:58, 74.97s/it]4it [04:58, 74.73s/it]
+0: 3it [15:55, 325.88s/it]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 3it [15:56, 325.77s/it]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 2021-05-04 20:56:55.398135: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 20:56:55.403208: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 20:56:55.403335: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x560d7547fbb0 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 20:56:55.403371: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 2021-05-04 20:56:55.962707: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 20:56:55.967829: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 20:56:55.967986: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x5580e9547ef0 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 20:56:55.968021: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 3it [15:55, 325.14s/it]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 1it [01:18, 78.89s/it]2it [02:38, 78.99s/it]3it [03:58, 79.42s/it]4it [05:20, 80.11s/it]4it [05:20, 80.07s/it]
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 3it [16:59, 347.05s/it]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 2021-05-04 20:57:52.698551: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 20:57:52.703512: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 20:57:52.703654: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x55a090b7def0 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 20:57:52.703686: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 2021-05-04 20:58:00.418355: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 20:58:00.423919: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 20:58:00.424700: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x5573397eb780 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 20:58:00.424780: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 1it [01:04, 64.61s/it]2it [02:09, 64.79s/it]3it [03:16, 65.30s/it]4it [04:23, 66.00s/it]4it [04:23, 65.99s/it]
+0: 1it [01:05, 65.14s/it]2it [02:10, 65.19s/it]3it [03:17, 65.78s/it]4it [04:25, 66.37s/it]4it [04:25, 66.34s/it]
+0: 4it [18:41, 284.92s/it]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 4it [18:45, 285.70s/it]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 1it [01:05, 65.61s/it]2it [02:11, 65.77s/it]3it [03:19, 66.32s/it]4it [04:27, 66.85s/it]4it [04:27, 66.86s/it]
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 1it [01:05, 65.31s/it]2it [02:11, 65.45s/it]3it [03:17, 65.88s/it]4it [04:26, 66.54s/it]4it [04:26, 66.51s/it]
+0: 4it [18:51, 287.43s/it]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 2021-05-04 20:59:42.902919: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 20:59:42.907496: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 20:59:42.907616: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x56484ff6a150 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 20:59:42.907651: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 2021-05-04 20:59:44.360042: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 20:59:44.364527: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 20:59:44.364650: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x55a6b87131f0 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 20:59:44.364680: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 4it [18:53, 287.90s/it]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 2021-05-04 20:59:50.468217: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 20:59:50.472707: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 20:59:50.472840: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x555586150600 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 20:59:50.472872: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 2021-05-04 20:59:52.769624: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 20:59:52.774025: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 20:59:52.774162: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x56477c456830 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 20:59:52.774195: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 1it [01:08, 68.82s/it]2it [02:18, 68.97s/it]3it [03:28, 69.37s/it]4it [04:39, 69.86s/it]4it [04:39, 69.86s/it]
+0: 4it [19:48, 301.70s/it]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 2021-05-04 21:00:48.173920: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 21:00:48.179009: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 21:00:48.179269: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x563bbb767ef0 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 21:00:48.179303: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 1it [01:12, 72.25s/it]2it [02:25, 72.50s/it]3it [03:39, 72.98s/it]4it [04:54, 73.62s/it]4it [04:54, 73.63s/it]
+0: 4it [20:39, 314.39s/it]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 2021-05-04 21:01:38.842571: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 21:01:38.847124: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 21:01:38.847259: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x556b3467cbc0 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 21:01:38.847293: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 1it [01:13, 73.53s/it]2it [02:28, 73.97s/it]3it [03:43, 74.33s/it]4it [04:59, 74.88s/it]4it [04:59, 74.97s/it]
+0: 1it [01:13, 73.56s/it]2it [02:27, 73.78s/it]3it [03:43, 74.28s/it]4it [05:00, 75.11s/it]4it [05:00, 75.09s/it]
+0: 4it [21:00, 319.51s/it]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 4it [21:01, 319.63s/it]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 2021-05-04 21:02:00.083713: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 21:02:00.088306: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 21:02:00.088435: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x5610af2c8720 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 21:02:00.088481: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 2021-05-04 21:02:00.954545: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 21:02:00.959725: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 21:02:00.959866: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x55eb64a29f80 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 21:02:00.959901: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 1it [01:04, 64.77s/it]2it [02:10, 64.99s/it]3it [03:17, 65.61s/it]4it [04:24, 66.12s/it]4it [04:24, 66.16s/it]
+0: 4it [21:22, 325.81s/it]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 2021-05-04 21:02:22.296881: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 21:02:22.301464: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 21:02:22.301590: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x55a0513e2c00 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 21:02:22.301623: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 1it [01:19, 79.00s/it]2it [02:38, 79.16s/it]3it [03:59, 79.65s/it]4it [05:21, 80.41s/it]4it [05:21, 80.38s/it]
+0: 4it [22:25, 340.89s/it]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 2021-05-04 21:03:26.832460: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 21:03:26.837592: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 21:03:26.837809: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x5615558c1850 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 21:03:26.837878: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 1it [01:04, 64.48s/it]2it [02:10, 64.90s/it]3it [03:16, 65.32s/it]4it [04:23, 65.91s/it]4it [04:23, 65.99s/it]
+0: 1it [01:05, 65.22s/it]2it [02:11, 65.43s/it]3it [03:17, 65.83s/it]4it [04:25, 66.38s/it]4it [04:25, 66.39s/it]
+0: 5it [23:12, 280.54s/it]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 5it [23:15, 281.05s/it]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 1it [01:06, 66.59s/it]2it [02:13, 66.69s/it]3it [03:20, 66.91s/it]4it [04:29, 67.44s/it]4it [04:29, 67.40s/it]
+0: 1it [01:05, 65.49s/it]2it [02:11, 65.77s/it]3it [03:19, 66.28s/it]4it [04:28, 67.03s/it]4it [04:28, 67.04s/it]
+0: 2021-05-04 21:04:13.418304: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 21:04:13.422768: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 21:04:13.422887: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x55b6167f8e40 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 21:04:13.422914: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 2021-05-04 21:04:14.536849: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 21:04:14.541295: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 21:04:14.541422: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x561e06c7ff70 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 21:04:14.541450: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 5it [23:25, 283.49s/it]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 5it [23:26, 283.38s/it]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 2021-05-04 21:04:24.699938: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 21:04:24.704368: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 21:04:24.704491: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x55e765db8a60 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 21:04:24.704519: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 2021-05-04 21:04:25.772316: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 21:04:25.777299: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 21:04:25.777445: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x55f7b87a9160 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 21:04:25.777486: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 1it [01:09, 69.03s/it]2it [02:18, 69.18s/it]3it [03:28, 69.51s/it]4it [04:40, 70.04s/it]4it [04:40, 70.03s/it]
+0: 5it [24:33, 296.60s/it]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 2021-05-04 21:05:32.907522: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 21:05:32.912652: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 21:05:32.912907: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x558d69b863c0 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 21:05:32.912941: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 1it [01:12, 72.55s/it]2it [02:26, 72.86s/it]3it [03:40, 73.29s/it]4it [04:55, 73.84s/it]4it [04:55, 73.88s/it]
+0: 5it [25:39, 310.16s/it]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 1it [01:04, 64.78s/it]2it [02:10, 64.99s/it]3it [03:16, 65.39s/it]4it [04:23, 65.94s/it]4it [04:23, 65.95s/it]
+0: 2021-05-04 21:06:39.121794: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 21:06:39.126907: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 21:06:39.127034: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x5571d671e050 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 21:06:39.127064: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 5it [25:51, 308.72s/it]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 2021-05-04 21:06:50.850056: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 21:06:50.854893: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 21:06:50.855035: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x55f3bfe0b5a0 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 21:06:50.855064: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 1it [01:15, 75.52s/it]2it [02:27, 74.60s/it]3it [03:42, 74.66s/it]4it [05:00, 75.44s/it]4it [05:00, 75.00s/it]
+0: 1it [01:14, 74.05s/it]2it [02:28, 74.26s/it]3it [03:44, 74.76s/it]4it [05:01, 75.27s/it]4it [05:01, 75.30s/it]
+0: 5it [26:06, 315.46s/it]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 5it [26:06, 315.21s/it]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 2021-05-04 21:07:05.947163: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 21:07:05.951899: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 21:07:05.952035: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x56314e6cbeb0 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 21:07:05.952066: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 2021-05-04 21:07:06.783893: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 21:07:06.789301: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 21:07:06.789486: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x557850b64600 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 21:07:06.789518: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 1it [01:06, 66.19s/it]2it [02:11, 65.93s/it]3it [03:17, 66.08s/it]4it [04:25, 66.48s/it]4it [04:25, 66.34s/it]
+0: 1it [01:05, 65.86s/it]2it [02:11, 65.94s/it]3it [03:19, 66.33s/it]4it [04:27, 66.98s/it]4it [04:27, 66.93s/it]
+0: 6it [27:44, 277.92s/it]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 6it [27:47, 278.41s/it]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 1it [01:19, 79.77s/it]2it [02:39, 79.82s/it]3it [04:00, 80.18s/it]4it [05:22, 80.77s/it]4it [05:22, 80.71s/it]
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 2021-05-04 21:08:45.118997: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 21:08:45.123464: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 21:08:45.123582: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x558ab5934eb0 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 21:08:45.123610: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 1it [01:05, 65.47s/it]2it [02:12, 65.89s/it]3it [03:19, 66.36s/it]4it [04:28, 67.00s/it]4it [04:28, 67.08s/it]
+0: 5it [27:53, 336.95s/it]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 2021-05-04 21:08:46.811473: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 21:08:46.816426: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 21:08:46.816683: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x5636103a76b0 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 21:08:46.816715: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 1it [01:05, 65.85s/it]2it [02:13, 66.37s/it]3it [03:21, 66.77s/it]4it [04:29, 67.39s/it]4it [04:29, 67.49s/it]
+0: 6it [27:58, 280.31s/it]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 6it [28:01, 280.79s/it]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 2021-05-04 21:08:54.636299: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 21:08:54.641805: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 21:08:54.642046: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x563707b93f40 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 21:08:54.642112: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 2021-05-04 21:08:57.750452: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 21:08:57.755250: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 21:08:57.755371: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x55eefe782b60 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 21:08:57.755399: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 2021-05-04 21:09:00.404614: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 21:09:00.409458: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 21:09:00.409578: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x5564566d9b70 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 21:09:00.409607: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 1it [01:10, 70.15s/it]2it [02:20, 70.28s/it]3it [03:32, 70.58s/it]4it [04:44, 71.10s/it]4it [04:44, 71.08s/it]
+0: 6it [29:22, 294.32s/it]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 2021-05-04 21:10:21.906469: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 21:10:21.911224: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 21:10:21.911355: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x5584be2ca4a0 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 21:10:21.911397: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 1it [01:04, 64.94s/it]2it [02:10, 65.15s/it]3it [03:17, 65.62s/it]4it [04:24, 66.01s/it]4it [04:24, 66.05s/it]
+0: 6it [30:20, 296.79s/it]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 2021-05-04 21:11:19.745788: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 21:11:19.750586: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 21:11:19.750705: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x55c186242320 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 21:11:19.750733: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 1it [01:12, 72.59s/it]2it [02:25, 72.66s/it]3it [03:39, 73.09s/it]4it [04:54, 73.63s/it]4it [04:54, 73.60s/it]
+0: 6it [30:38, 306.87s/it]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 2021-05-04 21:11:38.325043: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 21:11:38.329627: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 21:11:38.329755: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x55c0a6b94010 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 21:11:38.329786: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 1it [01:14, 74.58s/it]2it [02:29, 74.73s/it]3it [03:43, 74.59s/it]4it [04:59, 74.99s/it]4it [04:59, 74.96s/it]
+0: 1it [01:13, 73.80s/it]2it [02:28, 74.07s/it]3it [03:43, 74.50s/it]4it [05:03, 75.96s/it]4it [05:03, 75.94s/it]
+0: 6it [31:11, 312.17s/it]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 2021-05-04 21:12:10.914170: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 21:12:10.919232: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 21:12:10.919375: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x55b54ca9f480 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 21:12:10.919406: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 1it [01:06, 66.48s/it]2it [02:11, 66.05s/it]3it [03:17, 66.06s/it]4it [04:24, 66.39s/it]4it [04:24, 66.19s/it]
+0: 7it [32:15, 275.88s/it]7it [32:15, 276.46s/it]
+0: 1it [01:05, 65.23s/it]2it [02:10, 65.33s/it]3it [03:17, 65.73s/it]4it [04:25, 66.37s/it]4it [04:25, 66.33s/it]
+0: 7it [32:17, 275.87s/it]7it [32:17, 276.78s/it]
+0: 6it [31:22, 315.60s/it]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 1it [01:06, 66.76s/it]2it [02:13, 66.62s/it]3it [03:20, 66.76s/it]4it [04:28, 67.18s/it]4it [04:28, 67.07s/it]
+0: 7it [32:31, 278.11s/it]7it [32:31, 278.76s/it]
+0: 2021-05-04 21:13:19.179989: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 21:13:19.184691: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 21:13:19.184823: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x561babf2dc20 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 21:13:19.184855: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 1it [01:05, 65.80s/it]2it [02:13, 66.24s/it]3it [03:20, 66.69s/it]4it [04:28, 67.11s/it]4it [04:28, 67.22s/it]
+0: 7it [32:34, 278.64s/it]7it [32:34, 279.23s/it]
+0: 1it [01:19, 79.12s/it]2it [02:38, 79.33s/it]3it [03:59, 79.79s/it]4it [05:22, 80.62s/it]4it [05:22, 80.59s/it]
+0: 6it [33:20, 334.06s/it]WARNING:tensorflow:From /home/collins/.local/lib/python3.7/site-packages/tensorflow_core/python/compat/v2_compat.py:88: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: non-resource variables are not supported in the long term
+0: 0it [00:00, ?it/s]WARNING:tensorflow:From pnlnnetwork.py:140: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+0: Instructions for updating:
+0: Use `tf.cast` instead.
+0: 2021-05-04 21:14:21.924052: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+0: 2021-05-04 21:14:21.929649: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2900000000 Hz
+0: 2021-05-04 21:14:21.929878: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x5577361c2f60 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+0: 2021-05-04 21:14:21.929945: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+0: 1it [01:09, 69.56s/it]2it [02:20, 69.89s/it]3it [03:31, 70.38s/it]4it [04:44, 70.94s/it]4it [04:44, 71.00s/it]
+0: 7it [34:11, 292.61s/it]7it [34:11, 293.02s/it]
+0: 1it [01:05, 65.03s/it]2it [02:10, 65.28s/it]3it [03:16, 65.46s/it]4it [04:24, 66.00s/it]4it [04:24, 66.01s/it]
+0: 7it [34:49, 288.36s/it]7it [34:49, 298.45s/it]
+0: 1it [01:12, 72.33s/it]2it [02:25, 72.68s/it]3it [03:40, 73.20s/it]4it [04:55, 73.68s/it]4it [04:55, 73.76s/it]
+0: 7it [35:38, 304.79s/it]7it [35:38, 305.52s/it]
+0: 1it [01:13, 73.90s/it]2it [02:26, 73.41s/it]3it [03:38, 73.22s/it]4it [04:54, 73.87s/it]4it [04:54, 73.58s/it]
+0: 7it [36:10, 308.21s/it]7it [36:10, 310.06s/it]
+0: 1it [01:12, 72.63s/it]2it [02:25, 72.59s/it]3it [03:38, 72.85s/it]4it [04:52, 73.28s/it]4it [04:52, 73.22s/it]
+0: 7it [37:17, 327.40s/it]7it [37:17, 319.62s/it]
+0: 1it [01:18, 78.44s/it]2it [02:37, 78.72s/it]3it [03:58, 79.23s/it]4it [05:20, 80.00s/it]4it [05:20, 80.01s/it]
+0: 7it [38:45, 331.34s/it]7it [38:45, 332.24s/it]
