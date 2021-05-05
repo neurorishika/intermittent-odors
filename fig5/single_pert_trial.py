@@ -60,7 +60,7 @@ for i in range(6):
 v = np.array(v)
 width = int(blocktime/sim_res)
 tfilter_base = np.ones(width)
-width_red = int(0.8*blocktime/sim_res)
+width_red = int(0.1*blocktime/sim_res)
 tfilter = np.zeros_like(tfilter_base)
 tfilter[:width_red] = 1
 
