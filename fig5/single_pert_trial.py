@@ -60,7 +60,7 @@ for i in range(6):
 v = np.array(v)
 width = int(blocktime/sim_res)
 tfilter_base = np.ones(width)
-width_red = int(0.1*blocktime/sim_res)
+width_red = int(0.8*blocktime/sim_res)
 tfilter = np.zeros_like(tfilter_base)
 tfilter[:width_red] = 1
 
@@ -68,7 +68,7 @@ sim_time = len(v)*blocktime + 2*buffer
 t = np.arange(0,sim_time,sim_res)
 current_input = np.ones((n_n,t.shape[0]-int(2*buffer/sim_res)))
 for i in range(len(v)):
-    current_input[p_n:,i*width:(i+1)*width]=0.0735*current_input[p_n:,i*width:(i+1)*width]*tfilter_base
+    current_input[p_n:,i*width:(i+1)*width]=0.0735*current_input[p_n:,i*width:(i+1)*width]*tfilter
     current_input[:p_n,i*width:(i+1)*width]+= 0.225*(current_input[:p_n,i*width:(i+1)*width].T*v[i][:p_n]).T*tfilter - current_input[:p_n,i*width:(i+1)*width]
 current_input = np.concatenate([np.zeros((current_input.shape[0],int(buffer/sim_res))),current_input,np.zeros((current_input.shape[0],int(buffer/sim_res)))],axis=1)
 np.random.seed()
