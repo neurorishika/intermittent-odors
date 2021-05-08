@@ -1,0 +1,83 @@
+==========================================
+SLURM_CLUSTER_NAME = param-brahma
+SLURM_ARRAY_JOB_ID = 
+SLURM_ARRAY_TASK_ID = 
+SLURM_ARRAY_TASK_COUNT = 
+SLURM_ARRAY_TASK_MAX = 
+SLURM_ARRAY_TASK_MIN = 
+SLURM_JOB_ACCOUNT = collins
+SLURM_JOB_ID = 785643
+SLURM_JOB_NAME = pn-pert-trial
+SLURM_JOB_NODELIST = cn[033,037,060,080,092,100,157,160,185]
+SLURM_JOB_USER = collins
+SLURM_JOB_UID = 7009
+SLURM_JOB_PARTITION = standard
+SLURM_TASK_PID = 43865
+SLURM_SUBMIT_DIR = /home/collins/odor-states/fig5
+SLURM_CPUS_ON_NODE = 1
+SLURM_NTASKS = 
+SLURM_TASK_PID = 43865
+==========================================
+0: Session started...Session started...Session started...Session started...Completed. Total Execution Time: 265.34 secs
+0: Session started...Session started...Session started...Session started...Completed. Total Execution Time: 265.983 secs
+0: Session started...Session started...Session started...Session started...Completed. Total Execution Time: 266.314 secs
+0: Session started...Session started...Session started...Session started...Completed. Total Execution Time: 268.244 secs
+0: Session started...Session started...Session started...Session started...Completed. Total Execution Time: 272.578 secs
+0: Session started...Session started...Session started...Session started...Completed. Total Execution Time: 273.024 secs
+0: Session started...Session started...Session started...Session started...Completed. Total Execution Time: 273.332 secs
+0: Session started...Session started...Session started...Session started...Completed. Total Execution Time: 277.987 secs
+0: Session started...Session started...Session started...Session started...Completed. Total Execution Time: 391.974 secs
+0: Session started...Session started...Session started...Session started...Completed. Total Execution Time: 270.965 secs
+0: Session started...Session started...Session started...Session started...Completed. Total Execution Time: 271.984 secs
+0: Session started...Session started...Session started...Session started...Completed. Total Execution Time: 272.459 secs
+0: Session started...Session started...Session started...Session started...Completed. Total Execution Time: 270.918 secs
+0: Session started...Session started...Session started...Session started...Completed. Total Execution Time: 274.954 secs
+0: Session started...Session started...Session started...Session started...Completed. Total Execution Time: 276.222 secs
+0: Session started...Session started...Session started...Session started...Completed. Total Execution Time: 276.569 secs
+0: Session started...Session started...Session started...Session started...Completed. Total Execution Time: 282.485 secs
+0: Session started...Session started...Session started...Session started...Completed. Total Execution Time: 407.593 secs
+0: Session started...Session started...Session started...Session started...Completed. Total Execution Time: 271.443 secs
+0: Session started...Session started...Session started...Session started...Completed. Total Execution Time: 274.04 secs
+0: Session started...Session started...Session started...Session started...Completed. Total Execution Time: 273.081 secs
+0: Session started...Session started...Session started...Session started...Completed. Total Execution Time: 273.74 secs
+0: Session started...Session started...Session started...Session started...Completed. Total Execution Time: 273.684 secs
+0: Session started...Session started...Session started...Session started...Completed. Total Execution Time: 283.711 secs
+0: Session started...Session started...Session started...Session started...Completed. Total Execution Time: 278.751 secs
+0: Session started...Session started...Session started...Session started...Completed. Total Execution Time: 279.839 secs
+0: Session started...Session started...Session started...Session started...Completed. Total Execution Time: 272.897 secs
+0: Session started...Session started...Session started...Session started...Completed. Total Execution Time: 295.393 secs
+0: Session started...Session started...Session started...Session started...Completed. Total Execution Time: 296.886 secs
+0: Session started...Session started...Session started...Session started...Completed. Total Execution Time: 296.352 secs
+0: Session started...Session started...Session started...Session started...Completed. Total Execution Time: 278.978 secs
+0: Session started...Session started...Session started...Session started...Completed. Total Execution Time: 292.102 secs
+0: Session started...Session started...Session started...Session started...Completed. Total Execution Time: 280.583 secs
+0: Session started...Session started...Session started...Session started...Completed. Total Execution Time: 280.684 secs
+0: Session started...Session started...Session started...Session started...Completed. Total Execution Time: 403.361 secs
+0: Session started...Session started...Session started...Session started...Completed. Total Execution Time: 272.527 secs
+0: Session started...Session started...Session started...Session started...Completed. Total Execution Time: 279.801 secs
+0: Session started...Session started...Session started...Session started...Completed. Total Execution Time: 304.998 secs
+0: Session started...Session started...Session started...Session started...Completed. Total Execution Time: 305.254 secs
+0: Session started...Session started...Session started...Session started...Completed. Total Execution Time: 308.834 secs
+0: Session started...Session started...Session started...Session started...Completed. Total Execution Time: 280.804 secs
+0: Session started...Session started...Session started...Session started...Completed. Total Execution Time: 282.895 secs
+0: Session started...Session started...Session started...Session started...Completed. Total Execution Time: 314.916 secs
+0: Session started...Session started...Session started...Session started...Completed. Total Execution Time: 406.013 secs
+0: Session started...Session started...Session started...Session started...Completed. Total Execution Time: 274.795 secs
+0: Session started...Session started...Session started...Session started...Completed. Total Execution Time: 279.571 secs
+0: Session started...Session started...Session started...Session started...Completed. Total Execution Time: 305.588 secs
+0: Session started...Session started...Session started...Session started...Completed. Total Execution Time: 306.142 secs
+0: Session started...Session started...Session started...Session started...Completed. Total Execution Time: 309.086 secs
+0: Session started...Session started...Session started...Session started...Completed. Total Execution Time: 283.271 secs
+0: Session started...Session started...Session started...Session started...Completed. Total Execution Time: 283.932 secs
+0: Session started...Session started...Session started...Session started...Completed. Total Execution Time: 306.385 secs
+0: Session started...Session started...Session started...Session started...Completed. Total Execution Time: 288.814 secs
+0: Session started...Session started...Session started...Session started...Completed. Total Execution Time: 279.791 secs
+0: Session started...Session started...Session started...Session started...Completed. Total Execution Time: 405.12 secs
+0: Session started...Session started...Session started...Session started...Completed. Total Execution Time: 306.25 secs
+0: Session started...Session started...Session started...Session started...Completed. Total Execution Time: 308.707 secs
+0: Session started...Session started...Session started...Session started...Completed. Total Execution Time: 284.155 secs
+0: Session started...Session started...Session started...Session started...Completed. Total Execution Time: 309.01 secs
+0: Session started...Session started...Session started...Session started...Completed. Total Execution Time: 302.587 secs
+0: Session started...Session started...Session started...Session started...Completed. Total Execution Time: 303.65 secs
+0: Session started...Session started...Session started...Session started...Completed. Total Execution Time: 410.132 secs
+0: Session started...Session started...Session started...Session started...Completed. Total Execution Time: 393.471 secs
