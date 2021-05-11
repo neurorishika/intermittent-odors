@@ -22,7 +22,7 @@ pPNLN = 0.1
 pLNPN = 0.2
 
 ach_mat = np.zeros((n_n,n_n))
-np.random.seed(64163+int(sys.argv[1]))
+np.random.seed(64163+int(sys.argv[1])) # Random.org
 ach_mat[p_n:,:p_n] = np.random.choice([0.,1.],size=(l_n,p_n),p=(1-pPNLN,pPNLN))
 ach_mat[:p_n,:p_n] = np.random.choice([0.,1.],size=(p_n,p_n),p=(1-pPNPN,pPNPN))
 n_syn_ach = int(np.sum(ach_mat))
@@ -48,28 +48,28 @@ sgaba_mat[:p_n,p_n:] = LNPN
 np.fill_diagonal(sgaba_mat,0.)
 n_syn_sgaba = int(np.sum(sgaba_mat))
 
-blocktime = 1000 # in ms
+blocktime = 12000 # in ms
 buffer = 500 # in ms
 sim_res = 0.01 # in ms
 min_block = 50 # in ms
 
-np.random.seed(int(sys.argv[2]))
-v=[]
-for i in range(6):
-    v.append(np.concatenate([np.random.choice([0,1],p=[0.9,0.1],size=90),[0]*30]))
-v = np.array(v)
-width = int(blocktime/sim_res)
-tfilter_base = np.ones(width)
-width_red = int(0.8*blocktime/sim_res)
-tfilter = np.zeros_like(tfilter_base)
-tfilter[:width_red] = 1
+np.random.seed(int(sys.argv[1])+int(sys.argv[2])+int(sys.argv[3]))
+sw_state = [0]
+switch_prob = 0.3
+for i in np.random.choice([0,1],p=[1-switch_prob,switch_prob],size=int(blocktime/min_block)-1):
+    if i==1:
+        sw_state.append(1-sw_state[-1])
+    else:
+        sw_state.append(sw_state[-1])
+ts = np.repeat(sw_state,int(min_block/sim_res))
 
-sim_time = len(v)*blocktime + 2*buffer
+sim_time = blocktime + 2*buffer
 t = np.arange(0,sim_time,sim_res)
 current_input = np.ones((n_n,t.shape[0]-int(2*buffer/sim_res)))
-for i in range(len(v)):
-    current_input[p_n:,i*width:(i+1)*width]=0.0735*current_input[p_n:,i*width:(i+1)*width]*tfilter
-    current_input[:p_n,i*width:(i+1)*width]+= 0.24*(current_input[:p_n,i*width:(i+1)*width].T*v[i][:p_n]).T*tfilter - current_input[:p_n,i*width:(i+1)*width]
+np.random.seed(int(sys.argv[2]))
+set_pn = np.random.choice([0,1],p=[0.9,0.1],size=90)
+current_input[:p_n,:] = 0.20*(current_input[:p_n,:].T*set_pn).T*ts
+current_input[p_n:,:] = 0.0735*current_input[p_n:,:]*ts
 current_input = np.concatenate([np.zeros((current_input.shape[0],int(buffer/sim_res))),current_input,np.zeros((current_input.shape[0],int(buffer/sim_res)))],axis=1)
 np.random.seed()
 current_input += 0.05*current_input*np.random.normal(size=current_input.shape)+ 0.001*np.random.normal(size=current_input.shape)

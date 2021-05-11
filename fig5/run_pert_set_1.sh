@@ -1,5 +1,5 @@
 #!/bin/bash
-sbatch -N8 <<EOT
+sbatch -N10 <<EOT
 #!/bin/bash
 
 #SBATCH --time=24:00:00
@@ -8,14 +8,16 @@ sbatch -N8 <<EOT
 #SBATCH --output=job.%J.out
 #SBATCH --partition=standard
 
-# order = network set replicate 59428#13674#84932#72957#85036
+# order = network odor trial
 srun -lN1 -r0 init_pert_trial.sh $1 '59428' '1' &
 srun -lN1 -r1 init_pert_trial.sh $1 '59428' '2' &
 srun -lN1 -r2 init_pert_trial.sh $1 '59428' '3' &
 srun -lN1 -r3 init_pert_trial.sh $1 '59428' '4' &
 srun -lN1 -r4 init_pert_trial.sh $1 '59428' '5' &
-srun -lN1 -r5 init_pert_trial.sh $1 '13674' '1' &
-srun -lN1 -r6 init_pert_trial.sh $1 '13674' '2' &
-srun -lN1 -r7 init_pert_trial.sh $1 '13674' '3' &
+srun -lN1 -r5 init_pert_trial.sh $1 '59428' '6' &
+srun -lN1 -r6 init_pert_trial.sh $1 '59428' '7' &
+srun -lN1 -r7 init_pert_trial.sh $1 '59428' '8' &
+srun -lN1 -r8 init_pert_trial.sh $1 '59428' '9' &
+srun -lN1 -r9 init_pert_trial.sh $1 '59428' '10' &
 wait
 EOT
