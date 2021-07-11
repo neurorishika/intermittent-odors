@@ -55,7 +55,7 @@ min_block = 50 # in ms
 
 np.random.seed(int(sys.argv[1])+int(sys.argv[2])+int(sys.argv[3]))
 sw_state = [0]
-switch_prob = 0.3
+switch_prob = 0.1
 for i in np.random.choice([0,1],p=[1-switch_prob,switch_prob],size=int(blocktime/min_block)-1):
     if i==1:
         sw_state.append(1-sw_state[-1])
@@ -67,8 +67,9 @@ sim_time = blocktime + 2*buffer
 t = np.arange(0,sim_time,sim_res)
 current_input = np.ones((n_n,t.shape[0]-int(2*buffer/sim_res)))
 np.random.seed(int(sys.argv[2]))
-set_pn = np.random.choice([0,1],p=[0.9,0.1],size=90)
-current_input[:p_n,:] = 0.20*(current_input[:p_n,:].T*set_pn).T*ts
+set_pn = np.concatenate([np.ones(9),np.zeros(81)])
+np.random.shuffle(set_pn)
+current_input[:p_n,:] = 0.24*(current_input[:p_n,:].T*set_pn).T*ts
 current_input[p_n:,:] = 0.0735*current_input[p_n:,:]*ts
 current_input = np.concatenate([np.zeros((current_input.shape[0],int(buffer/sim_res))),current_input,np.zeros((current_input.shape[0],int(buffer/sim_res)))],axis=1)
 np.random.seed()

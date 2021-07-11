@@ -1,1 +1,6 @@
 *.gif
+*.npy
+*.zip
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
+**/*.ipynb_checkpoints/
