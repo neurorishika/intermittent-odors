@@ -54,8 +54,11 @@ sim_res = 0.01 # in ms
 min_block = 50 # in ms
 
 np.random.seed(int(sys.argv[1])+int(sys.argv[2])+int(sys.argv[3]))
-sw_state = [0]
 switch_prob = 0.1
+if switch_prob == 0.0:
+    sw_state = [1]
+else:
+    sw_state= [0]
 for i in np.random.choice([0,1],p=[1-switch_prob,switch_prob],size=int(blocktime/min_block)-1):
     if i==1:
         sw_state.append(1-sw_state[-1])
