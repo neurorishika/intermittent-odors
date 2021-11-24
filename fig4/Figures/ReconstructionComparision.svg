@@ -7,7 +7,7 @@
   <rdf:RDF xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
    <cc:Work>
     <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
-    <dc:date>2021-05-01T12:37:42.225411</dc:date>
+    <dc:date>2021-11-23T11:54:26.704056</dc:date>
     <dc:format>image/svg+xml</dc:format>
     <dc:creator>
      <cc:Agent>
@@ -39,25 +39,25 @@ z
 " style="fill:#ffffff;"/>
    </g>
    <g id="QuadMesh_1">
-    <path clip-path="url(#pcffec6c7ec)" d="M 45 43.2 
+    <path clip-path="url(#p686285dc0d)" d="M 45 43.2 
 L 184.5 43.2 
 L 184.5 179.1 
 L 45 179.1 
 L 45 43.2 
 " style="fill:#fcffa4;"/>
-    <path clip-path="url(#pcffec6c7ec)" d="M 184.5 43.2 
+    <path clip-path="url(#p686285dc0d)" d="M 184.5 43.2 
 L 324 43.2 
 L 324 179.1 
 L 184.5 179.1 
 L 184.5 43.2 
 " style="fill:#000004;"/>
-    <path clip-path="url(#pcffec6c7ec)" d="M 45 179.1 
+    <path clip-path="url(#p686285dc0d)" d="M 45 179.1 
 L 184.5 179.1 
 L 184.5 315 
 L 45 315 
 L 45 179.1 
 " style="fill:#57106e;"/>
-    <path clip-path="url(#pcffec6c7ec)" d="M 184.5 179.1 
+    <path clip-path="url(#p686285dc0d)" d="M 184.5 179.1 
 L 324 179.1 
 L 324 315 
 L 184.5 315 
@@ -70,10 +70,10 @@ L 184.5 179.1
       <defs>
        <path d="M 0 0 
 L 0 -3.5 
-" id="m4213110bd2" style="stroke:#000000;stroke-width:0.8;"/>
+" id="m155bf61f9d" style="stroke:#000000;stroke-width:0.8;"/>
       </defs>
       <g>
-       <use style="stroke:#000000;stroke-width:0.8;" x="114.75" xlink:href="#m4213110bd2" y="43.2"/>
+       <use style="stroke:#000000;stroke-width:0.8;" x="114.75" xlink:href="#m155bf61f9d" y="43.2"/>
       </g>
      </g>
      <g id="text_1">
@@ -348,7 +348,7 @@ z
     <g id="xtick_2">
      <g id="line2d_2">
       <g>
-       <use style="stroke:#000000;stroke-width:0.8;" x="254.25" xlink:href="#m4213110bd2" y="43.2"/>
+       <use style="stroke:#000000;stroke-width:0.8;" x="254.25" xlink:href="#m155bf61f9d" y="43.2"/>
       </g>
      </g>
      <g id="text_2">
@@ -660,10 +660,10 @@ z
       <defs>
        <path d="M 0 0 
 L -3.5 0 
-" id="m7d6d5bfe00" style="stroke:#000000;stroke-width:0.8;"/>
+" id="m7acecd5a28" style="stroke:#000000;stroke-width:0.8;"/>
       </defs>
       <g>
-       <use style="stroke:#000000;stroke-width:0.8;" x="45" xlink:href="#m7d6d5bfe00" y="111.15"/>
+       <use style="stroke:#000000;stroke-width:0.8;" x="45" xlink:href="#m7acecd5a28" y="111.15"/>
       </g>
      </g>
      <g id="text_4">
@@ -689,7 +689,7 @@ L -3.5 0
     <g id="ytick_2">
      <g id="line2d_4">
       <g>
-       <use style="stroke:#000000;stroke-width:0.8;" x="45" xlink:href="#m7d6d5bfe00" y="247.05"/>
+       <use style="stroke:#000000;stroke-width:0.8;" x="45" xlink:href="#m7acecd5a28" y="247.05"/>
       </g>
      </g>
      <g id="text_5">
@@ -961,7 +961,7 @@ z
   </g>
  </g>
  <defs>
-  <clipPath id="pcffec6c7ec">
+  <clipPath id="p686285dc0d">
    <rect height="271.8" width="279" x="45" y="43.2"/>
   </clipPath>
  </defs>
