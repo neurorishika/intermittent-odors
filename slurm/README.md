@@ -1,10 +1,4 @@
 # Simulation Instructions
-
-Requirements:
-Python 3.8.5 (preferably Anaconda distribution)
-TensorFlow 2.0 or above
-Access to atleast 10 compute nodes on a SLURM Server.
-
 To run the simulations on the at different intermittencies follow the following steps:
 
 1. Set the intermittency ie. switch probability on Line 57 of `single_odor_trial.py`.
