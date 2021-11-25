@@ -26,7 +26,9 @@ for fname, url in tqdm(zip(filenames, urls)):
         with open(fname, "wb") as fid:
           fid.write(r.content)
 
-call('cd data')
-call('set PATH=%PATH%;C:\\Program Files\\7-Zip\\')
-call('7z e data.zip.001')
-call('rm data.zip.*)
+dir_7zip  = "C:\\Program Files\\7-Zip\\"
+os.chdir('data')
+call(['set',f'PATH=%PATH%;{dir_7zip}'])
+call(['7z','e','data.zip.001'])
+for f in filter(lambda v: "data.zip." in v, os.listdir()):
+  os.remove(f)
