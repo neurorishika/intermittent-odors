@@ -24,7 +24,7 @@ scikit_learn==1.0.1
 scipy==1.6.2
 seaborn==0.11.1
 statannotations==0.4.2
-tensorflow(or tensorflow-gpu)==2.7.0
+tensorflow (or tensorflow-gpu)==2.7.0
 tqdm==4.59.0
 ```
 
