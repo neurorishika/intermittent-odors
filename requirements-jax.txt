@@ -1,3 +1,4 @@
 # Optional packages for the shared JAX backend and parity checks.
-jax==0.9.2
-jaxlib==0.9.2
+# Keep these compatible with the older Python/TensorFlow stack used in this repo.
+jax==0.4.30
+jaxlib==0.4.30

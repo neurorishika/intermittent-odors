@@ -20,7 +20,7 @@ if not PYTHON_BIN.exists():
     PYTHON_BIN = Path(sys.executable)
 
 
-def _preserve_files(paths):
+def _preserve_paths(paths):
     @contextmanager
     def manager():
         temp_dir = Path(tempfile.mkdtemp(prefix='iodor-preserve-'))
@@ -28,13 +28,15 @@ def _preserve_files(paths):
         try:
             for path in paths:
                 if path.exists():
-                    backup = temp_dir / path.name
+                    backup = temp_dir / f'{len(backups)}-{path.name}'
                     shutil.move(path, backup)
                     backups.append((path, backup))
             yield
         finally:
             for path in paths:
-                if path.exists():
+                if path.is_dir() and path.exists():
+                    shutil.rmtree(path)
+                elif path.exists():
                     path.unlink()
             for original, backup in backups:
                 shutil.move(backup, original)
@@ -43,11 +45,13 @@ def _preserve_files(paths):
     return manager()
 
 
-def _run_script(cwd, script_name, args, backend):
+def _run_script(cwd, script_name, args, backend, extra_env=None):
     env = os.environ.copy()
     env['IODOR_BACKEND'] = backend
     env['CUDA_VISIBLE_DEVICES'] = '-1'
     env['MPLBACKEND'] = 'Agg'
+    if extra_env:
+        env.update(extra_env)
     result = subprocess.run(
         [str(PYTHON_BIN), script_name, *args],
         cwd=cwd,
@@ -67,10 +71,20 @@ def _compare_arrays(name, tf_array, jax_array, atol=1e-10, rtol=1e-10):
     if tf_array.shape != jax_array.shape:
         raise SystemExit(f'{name}: shape mismatch {tf_array.shape} != {jax_array.shape}')
 
-    max_abs_diff = float(np.max(np.abs(tf_array - jax_array))) if tf_array.size else 0.0
+    matching_special = (
+        (np.isnan(tf_array) & np.isnan(jax_array))
+        | (np.isposinf(tf_array) & np.isposinf(jax_array))
+        | (np.isneginf(tf_array) & np.isneginf(jax_array))
+    )
+    valid = ~matching_special
+    if not np.any(valid):
+        max_abs_diff = 0.0
+    else:
+        diff = np.abs(np.nan_to_num(tf_array[valid] - jax_array[valid], nan=np.inf, posinf=np.inf, neginf=np.inf))
+        max_abs_diff = float(np.max(diff))
     print(f'{name}: max abs diff = {max_abs_diff:.3e}')
 
-    if not np.allclose(tf_array, jax_array, atol=atol, rtol=rtol):
+    if not np.allclose(tf_array, jax_array, atol=atol, rtol=rtol, equal_nan=True):
         raise SystemExit(f'{name}: parity check failed')
 
 
@@ -129,7 +143,7 @@ def _run_fig2_fixed_script(script_name, metadata, current_input, state_vector, t
         output_dir / 'state_0.npy',
     ]
 
-    with _preserve_files(protected_paths):
+    with _preserve_paths(protected_paths):
         outputs = {}
         for backend in ('tensorflow', 'jax'):
             _write_fig2_fixed_case(metadata, current_input, state_vector, times)
@@ -175,7 +189,7 @@ def _run_simple30_case():
         output_dir / f'state_0_{graphno}_{pertseed}.npy',
     ]
 
-    with _preserve_files(cache_files):
+    with _preserve_paths(cache_files):
         outputs = {}
         for backend in ('tensorflow', 'jax'):
             np.save(cache_dir / f'metadata_{graphno}_{pertseed}.npy', metadata, allow_pickle=True)
@@ -232,6 +246,35 @@ def _run_slurm_case():
     finally:
         if case_dir.exists():
             shutil.rmtree(case_dir)
+
+
+def _run_slurm_single_odor_trial_case():
+    graphno = 1
+    odor_seed = 59428
+    trial_seed = 991
+    data_file = SLURM_DIR / 'Data' / f'data_{graphno}_{odor_seed}_{trial_seed}.npy'
+    case_dir = SLURM_DIR / '__simcache__' / f'{graphno}_{odor_seed}_{trial_seed}'
+    test_env = {
+        'IODOR_DETERMINISTIC_STAGING': '1',
+        'IODOR_BLOCKTIME_MS': '200',
+        'IODOR_BUFFER_MS': '50',
+        'IODOR_BATCH_MS': '100',
+    }
+
+    with _preserve_paths([data_file, case_dir]):
+        outputs = {}
+        for backend in ('tensorflow', 'jax'):
+            _run_script(
+                SLURM_DIR,
+                'single_odor_trial.py',
+                [str(graphno), str(odor_seed), str(trial_seed)],
+                backend,
+                extra_env=test_env,
+            )
+            outputs[backend] = np.load(data_file)
+            data_file.unlink()
+
+    return outputs['tensorflow'], outputs['jax']
 
 
 def main():
@@ -307,6 +350,9 @@ def main():
     slurm_tf, slurm_jax = _run_slurm_case()
     _compare_arrays('slurm/pnlnnetwork output', slurm_tf['state'], slurm_jax['state'])
     _compare_arrays('slurm/pnlnnetwork final state', slurm_tf['state_vector'], slurm_jax['state_vector'])
+
+    slurm_trial_tf, slurm_trial_jax = _run_slurm_single_odor_trial_case()
+    _compare_arrays('slurm/single_odor_trial output', slurm_trial_tf, slurm_trial_jax)
 
     print('Script-level JAX parity checks passed.')
 

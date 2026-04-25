@@ -2,7 +2,7 @@ import jax
 import jax.numpy as jnp
 import numpy as np
 
-jax.config.update('jax_enable_x64', True)
+from shared.jax_precision import JAX_DTYPE, to_jax_dtype
 
 
 def K_prop(V):
@@ -70,76 +70,85 @@ def KCa_prop(Ca):
 
 
 def _dense_from_sparse(values, indices, n_n):
-    dense = jnp.zeros((n_n ** 2,), dtype=jnp.float64)
+    dense = jnp.zeros((n_n ** 2,), dtype=JAX_DTYPE)
     dense = dense.at[indices].set(values)
     return jnp.transpose(dense.reshape((n_n, n_n)))
 
 
-def _to_float64(value):
-    return jnp.asarray(np.asarray(value, dtype=np.float64), dtype=jnp.float64)
+def _sum_synaptic_current(values, row_ids, V, reversal, conductance, n_n):
+    incoming = jax.ops.segment_sum(values, row_ids, num_segments=n_n)
+    return incoming * (V - reversal) * conductance
 
 
-def build_dynamics(config, current_input):
+def _to_jax_array(value):
+    return to_jax_dtype(value)
+
+
+def _input_index_at_time(t, input_scale, input_steps):
+    index = jax.lax.convert_element_type(t * input_scale, jnp.int32)
+    return jnp.clip(index, 0, input_steps - 1)
+
+
+def build_dynamics_core(config):
     n_n = int(config['n_n'])
     p_n = int(config['p_n'])
     l_n = int(config['l_n'])
 
-    C_m = _to_float64(config['C_m'])
-    g_K = _to_float64(config['g_K'])
-    g_L = _to_float64(config['g_L'])
-    E_K = _to_float64(config['E_K'])
-    E_L = _to_float64(config['E_L'])
-    g_Na = _to_float64(config['g_Na'])
-    g_A = _to_float64(config['g_A'])
-    E_Na = _to_float64(config['E_Na'])
-    E_A = _to_float64(config['E_A'])
-    g_Ca = _to_float64(config['g_Ca'])
-    g_KCa = _to_float64(config['g_KCa'])
-    E_Ca = _to_float64(config['E_Ca'])
-    E_KCa = _to_float64(config['E_KCa'])
+    C_m = _to_jax_array(config['C_m'])
+    g_K = _to_jax_array(config['g_K'])
+    g_L = _to_jax_array(config['g_L'])
+    E_K = _to_jax_array(config['E_K'])
+    E_L = _to_jax_array(config['E_L'])
+    g_Na = _to_jax_array(config['g_Na'])
+    g_A = _to_jax_array(config['g_A'])
+    E_Na = _to_jax_array(config['E_Na'])
+    E_A = _to_jax_array(config['E_A'])
+    g_Ca = _to_jax_array(config['g_Ca'])
+    g_KCa = _to_jax_array(config['g_KCa'])
+    E_Ca = _to_jax_array(config['E_Ca'])
+    E_KCa = _to_jax_array(config['E_KCa'])
     A_Ca = float(config['A_Ca'])
     Ca0 = float(config['Ca0'])
     t_Ca = float(config['t_Ca'])
+    input_scale = jnp.asarray(100.0, dtype=JAX_DTYPE)
 
     ach_mat = np.asarray(config['ach_mat'], dtype=np.float64)
     ach_mask = ach_mat.reshape(-1) == 1
-    ach_indices = jnp.asarray(np.flatnonzero(ach_mask).astype(np.int32), dtype=jnp.int32)
-    ach_mat_tensor = _to_float64(ach_mat)
+    ach_row_ids = jnp.asarray(np.flatnonzero(ach_mask).astype(np.int32) // n_n, dtype=jnp.int32)
+    ach_col_ids = jnp.asarray(np.flatnonzero(ach_mask).astype(np.int32) % n_n, dtype=jnp.int32)
     n_syn_ach = int(np.sum(ach_mat))
-    alp_ach = _to_float64(config['alp_ach'])
-    bet_ach = _to_float64(config['bet_ach'])
+    alp_ach = _to_jax_array(config['alp_ach'])
+    bet_ach = _to_jax_array(config['bet_ach'])
     t_max = float(config['t_max'])
     t_delay = float(config['t_delay'])
-    A = _to_float64(config['A'])
-    g_ach = _to_float64(config['g_ach'])
-    E_ach = _to_float64(config['E_ach'])
+    A = _to_jax_array(config['A'])
+    g_ach = _to_jax_array(config['g_ach'])
+    E_ach = _to_jax_array(config['E_ach'])
 
     fgaba_mat = np.asarray(config['fgaba_mat'], dtype=np.float64)
     fgaba_mask = fgaba_mat.reshape(-1) == 1
-    fgaba_indices = jnp.asarray(np.flatnonzero(fgaba_mask).astype(np.int32), dtype=jnp.int32)
-    fgaba_mat_tensor = _to_float64(fgaba_mat)
+    fgaba_row_ids = jnp.asarray(np.flatnonzero(fgaba_mask).astype(np.int32) // n_n, dtype=jnp.int32)
+    fgaba_col_ids = jnp.asarray(np.flatnonzero(fgaba_mask).astype(np.int32) % n_n, dtype=jnp.int32)
     n_syn_fgaba = int(np.sum(fgaba_mat))
-    alp_fgaba = _to_float64(config['alp_fgaba'])
-    bet_fgaba = _to_float64(config['bet_fgaba'])
-    V0 = _to_float64(config['V0'])
-    sigma = _to_float64(config['sigma'])
-    g_fgaba = _to_float64(config['g_fgaba'])
-    E_fgaba = _to_float64(config['E_fgaba'])
+    alp_fgaba = _to_jax_array(config['alp_fgaba'])
+    bet_fgaba = _to_jax_array(config['bet_fgaba'])
+    V0 = _to_jax_array(config['V0'])
+    sigma = _to_jax_array(config['sigma'])
+    g_fgaba = _to_jax_array(config['g_fgaba'])
+    E_fgaba = _to_jax_array(config['E_fgaba'])
 
     sgaba_mat = np.asarray(config['sgaba_mat'], dtype=np.float64)
     sgaba_mask = sgaba_mat.reshape(-1) == 1
-    sgaba_indices = jnp.asarray(np.flatnonzero(sgaba_mask).astype(np.int32), dtype=jnp.int32)
-    sgaba_mat_tensor = _to_float64(sgaba_mat)
+    sgaba_row_ids = jnp.asarray(np.flatnonzero(sgaba_mask).astype(np.int32) // n_n, dtype=jnp.int32)
+    sgaba_col_ids = jnp.asarray(np.flatnonzero(sgaba_mask).astype(np.int32) % n_n, dtype=jnp.int32)
     n_syn_sgaba = int(np.sum(sgaba_mat))
-    K_sgaba = _to_float64(config['K_sgaba'])
-    r1_sgaba = _to_float64(config['r1_sgaba'])
-    r2_sgaba = _to_float64(config['r2_sgaba'])
-    r3_sgaba = _to_float64(config['r3_sgaba'])
-    r4_sgaba = _to_float64(config['r4_sgaba'])
-    G_sgaba = _to_float64(config['G_sgaba'])
-    E_sgaba = _to_float64(config['E_sgaba'])
-
-    current_input_tensor = jnp.asarray(np.asarray(current_input, dtype=np.float64).T, dtype=jnp.float64)
+    K_sgaba = _to_jax_array(config['K_sgaba'])
+    r1_sgaba = _to_jax_array(config['r1_sgaba'])
+    r2_sgaba = _to_jax_array(config['r2_sgaba'])
+    r3_sgaba = _to_jax_array(config['r3_sgaba'])
+    r4_sgaba = _to_jax_array(config['r4_sgaba'])
+    G_sgaba = _to_jax_array(config['G_sgaba'])
+    E_sgaba = _to_jax_array(config['E_sgaba'])
 
     def I_K(V, n):
         return g_K * n ** 4 * (V - E_K)
@@ -160,22 +169,20 @@ def build_dynamics(config, current_input):
         return g_KCa * m * (V - E_KCa)
 
     def I_ach(o, V):
-        o_ = _dense_from_sparse(o, ach_indices, n_n)
-        return jnp.sum(jnp.transpose((o_ * (V - E_ach)) * g_ach), axis=1)
+        return _sum_synaptic_current(o, ach_row_ids, V, E_ach, g_ach, n_n)
 
     def I_fgaba(o, V):
-        o_ = _dense_from_sparse(o, fgaba_indices, n_n)
-        return jnp.sum(jnp.transpose((o_ * (V - E_fgaba)) * g_fgaba), axis=1)
+        return _sum_synaptic_current(o, fgaba_row_ids, V, E_fgaba, g_fgaba, n_n)
 
     def I_sgaba(G, V):
         G4 = jnp.power(G, 4) / (jnp.power(G, 4) + K_sgaba)
-        G_ = _dense_from_sparse(G4, sgaba_indices, n_n)
-        return jnp.sum(jnp.transpose((G_ * (V - E_sgaba)) * G_sgaba), axis=1)
+        return _sum_synaptic_current(G4, sgaba_row_ids, V, E_sgaba, G_sgaba, n_n)
 
-    def I_inj_t(t, V):
-        return current_input_tensor[jnp.asarray(t * 100, dtype=jnp.int32)] * (V - E_ach)
+    def I_inj_t(t, V, current_input_tensor):
+        index = _input_index_at_time(t, input_scale, current_input_tensor.shape[0])
+        return current_input_tensor[index] * (V - E_ach)
 
-    def dXdt(X, t):
+    def dXdt(X, t, current_input_tensor):
         V_p = X[0:p_n]
         V_l = X[p_n:n_n]
 
@@ -225,18 +232,18 @@ def build_dynamics(config, current_input):
         CmdV_l = -I_Ca(V_l, m_Ca, h_Ca) - I_KCa(V_l, m_KCa)
         CmdV = jnp.concatenate([CmdV_p, CmdV_l], axis=0)
 
-        dV = (-I_inj_t(t, V) + CmdV - I_K(V, n_K) - I_L(V) - I_ach(o_ach, V) - I_fgaba(o_fgaba, V) - I_sgaba(g_sgaba, V)) / C_m
+        dV = (-I_inj_t(t, V, current_input_tensor) + CmdV - I_K(V, n_K) - I_L(V) - I_ach(o_ach, V) - I_fgaba(o_fgaba, V) - I_sgaba(g_sgaba, V)) / C_m
 
         T_ach = jnp.where(
             jnp.logical_and(t > fire_t + t_delay, t < fire_t + t_max + t_delay),
             A,
             jnp.zeros_like(A),
         )
-        T_ach = (ach_mat_tensor * T_ach).reshape(-1)[ach_indices]
+        T_ach = T_ach[ach_col_ids]
         do_achdt = alp_ach * (1.0 - o_ach) * T_ach - bet_ach * o_ach
 
         T_fgaba = 1.0 / (1.0 + jnp.exp(-(V - V0) / sigma))
-        T_fgaba = (fgaba_mat_tensor * T_fgaba).reshape(-1)[fgaba_indices]
+        T_fgaba = T_fgaba[fgaba_col_ids]
         do_fgabadt = alp_fgaba * (1.0 - o_fgaba) * T_fgaba - bet_fgaba * o_fgaba
 
         dg_sgabadt = -r4_sgaba * g_sgaba + r3_sgaba * r_sgaba
@@ -246,7 +253,7 @@ def build_dynamics(config, current_input):
             A,
             jnp.zeros_like(A),
         )
-        T_sgaba = (sgaba_mat_tensor * T_sgaba).reshape(-1)[sgaba_indices]
+        T_sgaba = T_sgaba[sgaba_col_ids]
         dr_sgabadt = r1_sgaba * (1.0 - r_sgaba) * T_sgaba - r2_sgaba * r_sgaba
 
         dfdt = jnp.zeros_like(fire_t)
@@ -270,3 +277,9 @@ def build_dynamics(config, current_input):
         ], axis=0)
 
     return dXdt
+
+
+def build_dynamics(config, current_input):
+    current_input_tensor = _to_jax_array(current_input).T
+    dXdt = build_dynamics_core(config)
+    return lambda X, t: dXdt(X, t, current_input_tensor)

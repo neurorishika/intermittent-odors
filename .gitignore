@@ -14,6 +14,7 @@ __pycache__
 .vscode/
 */.vscode/*
 **/.vscode/
+**/__jaxcache__/*
 data/data.zip.001
 data/data.zip.002
 data/data.zip.003

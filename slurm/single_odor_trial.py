@@ -1,110 +1,79 @@
-from subprocess import call
-from tqdm import tqdm
-import numpy as np
 import os
-import re
 import shutil
 import sys
-import time
+from pathlib import Path
 
-if not os.path.exists(f"__simcache__/{sys.argv[1]}_{sys.argv[2]}_{sys.argv[3]}"):
-    os.makedirs(f"__simcache__/{sys.argv[1]}_{sys.argv[2]}_{sys.argv[3]}")
-else:
-    shutil.rmtree(f"__simcache__/{sys.argv[1]}_{sys.argv[2]}_{sys.argv[3]}")
-    os.makedirs(f"__simcache__/{sys.argv[1]}_{sys.argv[2]}_{sys.argv[3]}")
+from simulation import (build_fire_thresholds, build_slurm_config,
+                        sample_stride_from_sim_res, simulate_time_batches,
+                        split_pnlnnetwork_timepoints)
+from tqdm import tqdm
+from trial_setup import (build_trial_case, configure_runtime_environment,
+                         load_trial_settings, prepare_case_directory,
+                         write_case_inputs)
 
-n_n = 120
-p_n = 90
-l_n = 30
 
-pPNPN = 0.0
-pPNLN = 0.1
-pLNPN = 0.2
+def main(argv=None):
+    argv = argv or sys.argv[1:]
+    if len(argv) != 3:
+        raise SystemExit('Usage: single_odor_trial.py <graph_no> <odor_seed> <trial_seed>')
 
-ach_mat = np.zeros((n_n,n_n))
-np.random.seed(64163+int(sys.argv[1])) # Random.org
-ach_mat[p_n:,:p_n] = np.random.choice([0.,1.],size=(l_n,p_n),p=(1-pPNLN,pPNLN))
-ach_mat[:p_n,:p_n] = np.random.choice([0.,1.],size=(p_n,p_n),p=(1-pPNPN,pPNPN))
-n_syn_ach = int(np.sum(ach_mat))
+    graph_no = int(argv[0])
+    odor_seed = int(argv[1])
+    trial_seed = int(argv[2])
 
-LNPN = np.zeros((p_n,l_n))
-stride = int(p_n/l_n)
-spread = (round(pLNPN*p_n)//2)*2+1 # Round to closest odd integer
-center = 0
-index = np.arange(p_n)
-for i in range(l_n):
-    idx = index[np.arange(center-spread//2,1+center+spread//2)%p_n]
-    LNPN[idx,i] = 1
-    center+=stride
+    root = Path(__file__).resolve().parent
+    cache_root = root / '__simcache__'
+    data_dir = root / 'Data'
+    network_dir = root.parent / 'modules' / 'networks'
 
-fgaba_mat = np.zeros((n_n,n_n))
-fgaba_mat[:p_n,p_n:] = LNPN # LN->PN
-fgaba_mat[p_n:,p_n:] = np.loadtxt(f'../modules/networks/matrix_{sys.argv[1]}.csv',delimiter=',') # LN->LN
-np.fill_diagonal(fgaba_mat,0.)
-n_syn_fgaba = int(np.sum(fgaba_mat))
+    case_dir = prepare_case_directory(cache_root, graph_no, odor_seed, trial_seed)
+    settings = load_trial_settings(os.environ)
+    case = build_trial_case(
+        graph_no,
+        odor_seed,
+        trial_seed,
+        network_dir,
+        settings,
+        deterministic_staging=os.environ.get('IODOR_DETERMINISTIC_STAGING') == '1',
+    )
+    write_case_inputs(case_dir, case)
+    os.environ.update(configure_runtime_environment(root, os.environ.copy()))
 
-sgaba_mat = np.zeros((n_n,n_n))
-sgaba_mat[:p_n,p_n:] = LNPN
-np.fill_diagonal(sgaba_mat,0.)
-n_syn_sgaba = int(np.sum(sgaba_mat))
+    config = build_slurm_config(
+        case['ach_mat'],
+        case['fgaba_mat'],
+        case['sgaba_mat'],
+        n_n=settings.n_n,
+        p_n=settings.p_n,
+        l_n=settings.l_n,
+    )
+    thresholds = build_fire_thresholds(settings.p_n, settings.l_n)
 
-blocktime = 12000 # in ms
-buffer = 500 # in ms
-sim_res = 0.01 # in ms
-min_block = 50 # in ms
+    success = False
+    try:
+        expanded_time_batches = []
+        for time_batch in case['time_batches']:
+            expanded_time_batches.extend(split_pnlnnetwork_timepoints(time_batch, settings.sim_res))
 
-np.random.seed(int(sys.argv[1])+int(sys.argv[2])+int(sys.argv[3]))
-switch_prob = 0.1
-if switch_prob == 0.0:
-    sw_state = [1]
-else:
-    sw_state = [0]
-for i in np.random.choice([0,1],p=[1-switch_prob,switch_prob],size=int(blocktime/min_block)-1):
-    if i==1:
-        sw_state.append(1-sw_state[-1])
-    else:
-        sw_state.append(sw_state[-1])
-ts = np.repeat(sw_state,int(min_block/sim_res))
+        dataset, final_state = simulate_time_batches(
+            config,
+            case['current_input'],
+            case['state_vector'],
+            expanded_time_batches,
+            thresholds,
+            sample_stride=sample_stride_from_sim_res(settings.sim_res),
+            sample_neurons=settings.n_n,
+            progress=tqdm,
+        )
+        np.save(data_dir / f'data_{graph_no}_{odor_seed}_{trial_seed}', dataset)
+        np.save(case_dir / 'state_vector.npy', final_state)
+        success = True
+    finally:
+        if success and case_dir.exists():
+            shutil.rmtree(case_dir)
 
-sim_time = blocktime + 2*buffer
-t = np.arange(0,sim_time,sim_res)
-current_input = np.ones((n_n,t.shape[0]-int(2*buffer/sim_res)))
-np.random.seed(int(sys.argv[2]))
-set_pn = np.concatenate([np.ones(9),np.zeros(81)])
-np.random.shuffle(set_pn)
-current_input[:p_n,:] = 0.24*(current_input[:p_n,:].T*set_pn).T*ts
-current_input[p_n:,:] = 0.0735*current_input[p_n:,:]*ts
-current_input = np.concatenate([np.zeros((current_input.shape[0],int(buffer/sim_res))),current_input,np.zeros((current_input.shape[0],int(buffer/sim_res)))],axis=1)
-np.random.seed()
-current_input += 0.05*current_input*np.random.normal(size=current_input.shape)+ 0.001*np.random.normal(size=current_input.shape)
 
-state_vector =  [-45]* p_n+[-45]* l_n + [0.5]* (n_n + 4*p_n + 3*l_n) + [2.4*(10**(-4))]*l_n + [0]*(n_syn_ach+n_syn_fgaba+2*n_syn_sgaba) + [-(sim_time+1)]*n_n
-state_vector = np.array(state_vector)
-np.random.seed()
-state_vector = state_vector + 0.005*state_vector*np.random.normal(size=state_vector.shape)
+if __name__ == '__main__':
+    import numpy as np
 
-n_batch = int(sim_time/1000)
-t_batch = np.array_split(t,n_batch)
-for i in range(1,n_batch):
-    t_batch[i] = np.append(t_batch[i-1][-1],t_batch[i])
-
-np.save(f'__simcache__/{sys.argv[1]}_{sys.argv[2]}_{sys.argv[3]}/state_vector',state_vector)
-np.save(f'__simcache__/{sys.argv[1]}_{sys.argv[2]}_{sys.argv[3]}/ach_mat',ach_mat)
-np.save(f'__simcache__/{sys.argv[1]}_{sys.argv[2]}_{sys.argv[3]}/fgaba_mat',fgaba_mat)
-np.save(f'__simcache__/{sys.argv[1]}_{sys.argv[2]}_{sys.argv[3]}/sgaba_mat',sgaba_mat)
-np.save(f'__simcache__/{sys.argv[1]}_{sys.argv[2]}_{sys.argv[3]}/current_input',current_input)
-
-series = enumerate(t_batch)
-for n,i in tqdm(series):
-    np.save(f'__simcache__/{sys.argv[1]}_{sys.argv[2]}_{sys.argv[3]}/timepoint',i)
-    call(['python','pnlnnetwork.py',sys.argv[1],sys.argv[2],sys.argv[3],str(n)])
-
-dataset = []
-files = list(filter(lambda v: "output_" in v,os.listdir(f'__simcache__/{sys.argv[1]}_{sys.argv[2]}_{sys.argv[3]}')))
-files.sort(key=lambda var:[int(x) if x.isdigit() else x for x in re.findall(r'[^0-9]|[0-9]+', var)])
-for i in files:
-    dataset.append(np.load(f'__simcache__/{sys.argv[1]}_{sys.argv[2]}_{sys.argv[3]}/{i}'))
-dataset = np.concatenate(dataset)
-np.save(f'Data/data_{sys.argv[1]}_{sys.argv[2]}_{sys.argv[3]}',dataset)
-
-shutil.rmtree(f"__simcache__/{sys.argv[1]}_{sys.argv[2]}_{sys.argv[3]}")
+    main()

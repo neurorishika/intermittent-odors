@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import contextlib
+import csv
 import hashlib
 import json
 import os
@@ -31,12 +32,14 @@ SAFE_EXECUTION_ENV = {
     'MKL_NUM_THREADS': '1',
     'NUMEXPR_NUM_THREADS': '1',
 }
+NUMERICAL_SUFFIXES = {'.csv', '.npy'}
 
 
 @dataclass(frozen=True)
 class NotebookSpec:
     path: Path
     output_paths: tuple[Path, ...]
+    transient_paths: tuple[Path, ...] = ()
     force_recalculate: bool = False
     patch_python_subprocess: bool = False
     patch_ffmpeg: bool = False
@@ -45,8 +48,8 @@ class NotebookSpec:
 NOTEBOOKS = (
     NotebookSpec(
         path=ROOT / 'fig2' / 'fig2.ipynb',
-        output_paths=(
-            ROOT / 'fig2' / 'Figures',
+        output_paths=(ROOT / 'fig2' / 'Figures',),
+        transient_paths=(
             ROOT / 'data' / '3LN',
             ROOT / 'data' / '3PN3LN',
             ROOT / 'data' / '30LN',
@@ -146,6 +149,11 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         help='Execute selected notebooks inline instead of spawning a fresh Python process per notebook.',
     )
     parser.add_argument(
+        '--numerical-only',
+        action='store_true',
+        help='Compare only committed numerical artifacts such as .npy and .csv outputs.',
+    )
+    parser.add_argument(
         '--child-notebook',
         help=argparse.SUPPRESS,
     )
@@ -158,6 +166,11 @@ def sha256_bytes(data: bytes) -> str:
 
 def load_npy(path: Path) -> Any:
     return np.load(path, allow_pickle=True)
+
+
+def load_csv_rows(path: Path) -> list[list[str]]:
+    with path.open(newline='') as handle:
+        return list(csv.reader(handle))
 
 
 def normalize_svg_text(text: str) -> str:
@@ -225,10 +238,57 @@ def compare_arrays(left: Any, right: Any, prefix: str = '') -> list[str]:
     return []
 
 
+def compare_csv_rows(left_rows: list[list[str]], right_rows: list[list[str]]) -> list[str]:
+    if len(left_rows) != len(right_rows):
+        return [f'row count mismatch: {len(left_rows)} != {len(right_rows)}']
+
+    differences: list[str] = []
+    for row_index, (left_row, right_row) in enumerate(zip(left_rows, right_rows)):
+        if len(left_row) != len(right_row):
+            differences.append(f'row {row_index}: column count mismatch: {len(left_row)} != {len(right_row)}')
+            if len(differences) >= 5:
+                break
+            continue
+
+        for col_index, (left_value, right_value) in enumerate(zip(left_row, right_row)):
+            try:
+                left_number = float(left_value)
+                right_number = float(right_value)
+                numeric = True
+            except ValueError:
+                numeric = False
+
+            if numeric:
+                if not np.isclose(left_number, right_number, atol=1e-10, rtol=1e-10, equal_nan=True):
+                    differences.append(
+                        f'row {row_index} col {col_index}: value mismatch: {left_number!r} != {right_number!r}'
+                    )
+            elif left_value != right_value:
+                differences.append(
+                    f'row {row_index} col {col_index}: value mismatch: {left_value!r} != {right_value!r}'
+                )
+
+            if len(differences) >= 5:
+                break
+
+        if len(differences) >= 5:
+            break
+
+    return differences
+
+
+def should_compare_file(path: Path, numerical_only: bool) -> bool:
+    if not numerical_only:
+        return True
+    return path.suffix.lower() in NUMERICAL_SUFFIXES
+
+
 def compare_files(baseline: Path, current: Path) -> list[str]:
     suffix = current.suffix.lower()
     if suffix == '.npy':
         return compare_arrays(load_npy(baseline), load_npy(current))
+    if suffix == '.csv':
+        return compare_csv_rows(load_csv_rows(baseline), load_csv_rows(current))
     if suffix == '.svg':
         baseline_svg = normalize_svg_text(baseline.read_text())
         current_svg = normalize_svg_text(current.read_text())
@@ -252,7 +312,7 @@ def collect_files(path: Path) -> dict[str, Path]:
     return files
 
 
-def compare_output_path(path: Path, backup_root: Path) -> list[str]:
+def compare_output_path(path: Path, backup_root: Path, numerical_only: bool = False) -> list[str]:
     relative_path = path.relative_to(ROOT)
     baseline_path = backup_root / relative_path
     baseline_files = collect_files(baseline_path)
@@ -260,6 +320,9 @@ def compare_output_path(path: Path, backup_root: Path) -> list[str]:
     differences: list[str] = []
 
     for file_name in sorted(set(baseline_files) | set(current_files)):
+        candidate_path = path / file_name if path.is_dir() else path
+        if not should_compare_file(candidate_path, numerical_only):
+            continue
         baseline_file = baseline_files.get(file_name)
         current_file = current_files.get(file_name)
         display_name = str(relative_path / file_name) if path.is_dir() else str(relative_path)
@@ -391,7 +454,7 @@ def patch_notebook(nb: nbformat.NotebookNode, spec: NotebookSpec) -> nbformat.No
 
 
 def execute_notebook(spec: NotebookSpec) -> None:
-    for output_path in spec.output_paths:
+    for output_path in managed_paths(spec):
         if output_path.suffix:
             output_path.parent.mkdir(parents=True, exist_ok=True)
         else:
@@ -451,6 +514,10 @@ def dedupe_paths(paths: list[Path]) -> list[Path]:
     return unique
 
 
+def managed_paths(spec: NotebookSpec) -> list[Path]:
+    return dedupe_paths([*spec.output_paths, *spec.transient_paths])
+
+
 def run_child_notebook(name: str) -> int:
     spec = get_notebook_spec(name)
     with temporary_environment(SAFE_EXECUTION_ENV):
@@ -469,7 +536,7 @@ def main(argv: list[str] | None = None) -> int:
         return run_child_notebook(args.child_notebook)
 
     selected_specs = select_notebooks(args.notebooks)
-    all_output_paths = dedupe_paths([path for spec in selected_specs for path in spec.output_paths])
+    all_output_paths = dedupe_paths([path for spec in selected_specs for path in managed_paths(spec)])
     results: list[dict[str, Any]] = []
 
     with tempfile.TemporaryDirectory(prefix='iodor-notebook-regen-') as temp_dir:
@@ -479,7 +546,7 @@ def main(argv: list[str] | None = None) -> int:
         exit_code = 0
         try:
             for spec in selected_specs:
-                restore_paths(list(spec.output_paths), backup_root)
+                restore_paths(managed_paths(spec), backup_root)
                 print(f'Executing {notebook_label(spec)}')
                 notebook_result: dict[str, Any] = {
                     'notebook': notebook_label(spec),
@@ -494,7 +561,7 @@ def main(argv: list[str] | None = None) -> int:
                         execute_notebook_subprocess(spec)
                     differences: list[str] = []
                     for output_path in spec.output_paths:
-                        differences.extend(compare_output_path(output_path, backup_root))
+                        differences.extend(compare_output_path(output_path, backup_root, numerical_only=args.numerical_only))
                     notebook_result['differences'] = differences
                     if differences:
                         notebook_result['status'] = 'diff'

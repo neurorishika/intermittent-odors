@@ -21,6 +21,70 @@ def normalize_by_indegree(values, matrix):
     return out
 
 
+def build_stable_current_input(rng, n_n, p_n, steps):
+    current_input = np.zeros((n_n, steps), dtype=np.float64)
+    activation = rng.choice([0.0, 1.0], size=steps, p=[0.375, 0.625])
+    if not np.any(activation):
+        activation[rng.integers(steps)] = 1.0
+
+    pn_drive = np.zeros(p_n, dtype=np.float64)
+    active_pn = max(1, int(np.ceil(p_n * 0.3)))
+    pn_drive[rng.choice(p_n, size=active_pn, replace=False)] = 1.0
+
+    current_input[:p_n, :] = 0.18 * pn_drive[:, None] * activation[None, :]
+    if n_n > p_n:
+        ln_activation = np.roll(activation, 1)
+        current_input[p_n:, :] = 0.055 * ln_activation[None, :]
+
+    current_input += 0.03 * current_input * rng.normal(size=current_input.shape)
+    current_input += 1e-4 * rng.normal(size=current_input.shape)
+    return np.clip(current_input, 0.0, None)
+
+
+def build_stable_state_vector(rng, n_n, p_n, l_n, n_syn_ach, n_syn_fgaba, n_syn_sgaba, sim_time):
+    state_vector = np.array(
+        [-45.0] * p_n
+        + [-45.0] * l_n
+        + [0.5] * (n_n + 4 * p_n + 3 * l_n)
+        + [2.4e-4] * l_n
+        + [0.0] * (n_syn_ach + n_syn_fgaba + 2 * n_syn_sgaba)
+        + [-(sim_time + 1.0)] * n_n,
+        dtype=np.float64,
+    )
+
+    state_vector[:n_n] += rng.normal(scale=0.75, size=n_n)
+
+    gate_start = n_n
+    gate_stop = 2 * n_n + 4 * p_n + 3 * l_n
+    state_vector[gate_start:gate_stop] = np.clip(
+        state_vector[gate_start:gate_stop] + 0.04 * rng.normal(size=gate_stop - gate_start),
+        0.0,
+        1.0,
+    )
+
+    ca_start = 2 * n_n + 4 * p_n + 3 * l_n
+    ca_stop = ca_start + l_n
+    if l_n:
+        state_vector[ca_start:ca_stop] = np.clip(
+            state_vector[ca_start:ca_stop] * (1.0 + 0.03 * rng.normal(size=l_n)),
+            1e-6,
+            None,
+        )
+
+    syn_start = 6 * n_n
+    syn_stop = syn_start + n_syn_ach + n_syn_fgaba + 2 * n_syn_sgaba
+    if syn_stop > syn_start:
+        state_vector[syn_start:syn_stop] = np.clip(
+            0.01 * rng.normal(size=syn_stop - syn_start),
+            0.0,
+            0.05,
+        )
+
+    fire_start = syn_stop
+    state_vector[fire_start:] += 0.1 * rng.normal(size=n_n)
+    return state_vector
+
+
 def legacy_build_dynamics(config, current_input):
     n_n = int(config['n_n'])
     p_n = int(config['p_n'])
@@ -298,10 +362,10 @@ def build_case(seed, n_n, p_n, ach_density, fgaba_density, sgaba_density):
         'E_sgaba': [-95.0] * n_n,
     }
 
-    total_state = 7 * n_n + n_syn_ach + n_syn_fgaba + 2 * n_syn_sgaba
-    state = rng.normal(size=total_state).astype(np.float64)
-    current_input = rng.normal(size=(n_n, 8)).astype(np.float64)
     times = np.arange(0.0, 0.08, 0.01, dtype=np.float64)
+    sim_time = float(times[-1] + (times[1] - times[0]))
+    state = build_stable_state_vector(rng, n_n, p_n, l_n, n_syn_ach, n_syn_fgaba, n_syn_sgaba, sim_time)
+    current_input = build_stable_current_input(rng, n_n, p_n, times.shape[0])
     thresholds = [0.0] * p_n + [-20.0] * l_n
     return config, current_input, state, times, thresholds
 
@@ -436,15 +500,28 @@ def evaluate(builder, config, current_input, state, times, thresholds):
             return sess.run([derivative, rollout])
 
 
+def max_abs_diff(left, right):
+    matching_special = (
+        (np.isnan(left) & np.isnan(right))
+        | (np.isposinf(left) & np.isposinf(right))
+        | (np.isneginf(left) & np.isneginf(right))
+    )
+    valid = ~matching_special
+    if not np.any(valid):
+        return 0.0
+    diff = np.abs(np.nan_to_num(left[valid] - right[valid], nan=np.inf, posinf=np.inf, neginf=np.inf))
+    return float(np.max(diff))
+
+
 def run_case(name, config, current_input, state, times, thresholds):
     legacy_derivative, legacy_rollout = evaluate(legacy_build_dynamics, config, current_input, state, times, thresholds)
     shared_derivative, shared_rollout = evaluate(build_dynamics, config, current_input, state, times, thresholds)
 
-    derivative_close = np.allclose(legacy_derivative, shared_derivative, atol=1e-12, rtol=1e-12)
-    rollout_close = np.allclose(legacy_rollout, shared_rollout, atol=1e-12, rtol=1e-12)
+    derivative_close = np.allclose(legacy_derivative, shared_derivative, atol=1e-12, rtol=1e-12, equal_nan=True)
+    rollout_close = np.allclose(legacy_rollout, shared_rollout, atol=1e-12, rtol=1e-12, equal_nan=True)
 
-    print(f'{name}: derivative max abs diff = {np.max(np.abs(legacy_derivative - shared_derivative)):.3e}')
-    print(f'{name}: rollout max abs diff = {np.max(np.abs(legacy_rollout - shared_rollout)):.3e}')
+    print(f'{name}: derivative max abs diff = {max_abs_diff(legacy_derivative, shared_derivative):.3e}')
+    print(f'{name}: rollout max abs diff = {max_abs_diff(legacy_rollout, shared_rollout):.3e}')
 
     if not derivative_close or not rollout_close:
         raise SystemExit(f'Parity check failed for {name}')

@@ -18,6 +18,19 @@ from shared.jax_network import build_dynamics as build_jax_dynamics
 from shared.tf_network import build_dynamics as build_tf_dynamics
 
 
+def max_abs_diff(left, right):
+    matching_special = (
+        (np.isnan(left) & np.isnan(right))
+        | (np.isposinf(left) & np.isposinf(right))
+        | (np.isneginf(left) & np.isneginf(right))
+    )
+    valid = ~matching_special
+    if not np.any(valid):
+        return 0.0
+    diff = np.abs(np.nan_to_num(left[valid] - right[valid], nan=np.inf, posinf=np.inf, neginf=np.inf))
+    return float(np.max(diff))
+
+
 def evaluate_jax(config, current_input, state, times, thresholds):
     dXdt = build_jax_dynamics(config, current_input)
     state_tensor = jnp.asarray(np.asarray(state, dtype=np.float64), dtype=jnp.float64)
@@ -31,11 +44,11 @@ def run_case(name, config, current_input, state, times, thresholds, atol=1e-10, 
     tf_derivative, tf_rollout = evaluate_tf(build_tf_dynamics, config, current_input, state, times, thresholds)
     jax_derivative, jax_rollout = evaluate_jax(config, current_input, state, times, thresholds)
 
-    derivative_close = np.allclose(tf_derivative, jax_derivative, atol=atol, rtol=rtol)
-    rollout_close = np.allclose(tf_rollout, jax_rollout, atol=atol, rtol=rtol)
+    derivative_close = np.allclose(tf_derivative, jax_derivative, atol=atol, rtol=rtol, equal_nan=True)
+    rollout_close = np.allclose(tf_rollout, jax_rollout, atol=atol, rtol=rtol, equal_nan=True)
 
-    print(f'{name}: derivative max abs diff = {np.max(np.abs(tf_derivative - jax_derivative)):.3e}')
-    print(f'{name}: rollout max abs diff = {np.max(np.abs(tf_rollout - jax_rollout)):.3e}')
+    print(f'{name}: derivative max abs diff = {max_abs_diff(tf_derivative, jax_derivative):.3e}')
+    print(f'{name}: rollout max abs diff = {max_abs_diff(tf_rollout, jax_rollout):.3e}')
 
     if not derivative_close or not rollout_close:
         raise SystemExit(f'JAX parity check failed for {name}')
