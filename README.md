@@ -88,6 +88,13 @@ The `120`-neuron case uses the exact production PN/LN topology. Other `--n-neuro
 
 The shared JAX path defaults to `IODOR_JAX_PRECISION=float64` to preserve parity. For exploratory speed/parity benchmarking, the benchmark harness can also run `float32` and experimental `bfloat16` modes in isolated subprocesses.
 
+#### Prepared Experiment API
+The refactored accelerated path now lives in the `intermittent_odors/` package. The canonical runtime entrypoints are `intermittent_odors.experiment` for experiment preparation/spec construction, `intermittent_odors.runtime` for compiled runners, and `intermittent_odors.builders` for higher-level figure or SLURM experiment builders.
+
+Use `prepare_experiment(...)` to normalize a model config, precompute synapse layouts, and attach rollout metadata such as `sample_stride`, `sample_neurons`, and input timestep. For higher-level experiment design, build an `ExperimentSpec` with `build_experiment_spec(...)` or one of the package builders, then call `compile_experiment(...)` to obtain a reusable backend runner with `run(...)`, `run_batch(...)`, `run_time_batches(...)`, and `run_time_batches_batch(...)` methods. This is the preferred interface for new JAX experiment code because it preserves compile reuse across repeated runs while avoiding shape-only cache collisions between different same-shaped network topologies.
+
+For CPU/GPU JAX parity verification, run `python check_device_parity.py --gpu-python .venv-gpu-bench/bin/python`. The default CPU path uses `.venv/bin/python`, and the GPU path disables JAX preallocation so parity checks can share the device with other workloads more reliably.
+
 ### Associated Datasets
 R. Mohanta and C. Assisi. 2021. Intermittent inputs reveal invariant odor representations (Part 1). Retrieved from https://osf.io/7d46t/  
 R. Mohanta and C. Assisi. 2021. Intermittent inputs reveal invariant odor representations (Part 2). Retrieved from https://osf.io/skrwn/

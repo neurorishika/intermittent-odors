@@ -30,7 +30,7 @@
 
 ## JAX Refactor Guidance
 
-- If asked to begin a JAX migration, start with `slurm/tf_integrator.py` and the ODE definition in `slurm/pnlnnetwork.py` before touching notebooks.
+- If asked to begin a JAX migration, start with `intermittent_odors/tf_integrator.py`, `intermittent_odors/tf_network.py`, and the runtime wiring in `intermittent_odors/runtime.py` before touching notebooks.
 - Keep the first refactor focused on parity: same state-vector layout, same output shapes, same saved-file naming, and a clear comparison path against the current TensorFlow implementation.
 - Reduce duplication before broad rewrites. Shared gating-current logic appears in both `slurm/` and `fig2/`; extracting a common model module is usually a safer first improvement than rewriting every notebook.
 - Safe follow-on improvements include parameterizing hard-coded paths, extracting reusable analysis helpers out of notebooks, and adding lightweight regression checks for spike detection or output-shape stability.

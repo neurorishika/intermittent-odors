@@ -36,6 +36,7 @@ def build_case_plan(args):
     from benchmark_cases import build_case as build_synthetic_case
     from benchmark_cases import (build_realistic_trial_case,
                                  build_repo_production_case)
+    from intermittent_odors.experiment import build_experiment_spec
 
     if args.case == 'realistic-slurm':
         return build_realistic_trial_case(
@@ -71,7 +72,22 @@ def build_case_plan(args):
         raise ValueError(f'Unsupported case {args.case!r}.')
 
     dt = float(times[1] - times[0]) if len(times) > 1 else 0.0
+    experiment_spec = build_experiment_spec(
+        config,
+        current_input,
+        state,
+        times,
+        thresholds,
+        input_dt=dt if dt else None,
+        sample_stride=1,
+        sample_neurons=None,
+        time_batches=[times],
+        metadata={'topology': 'direct', 'case': args.case},
+        network_metadata={'family': args.case},
+        stimulus_metadata={'family': args.case},
+    )
     return {
+        'experiment_spec': experiment_spec,
         'config': config,
         'current_input': current_input,
         'state_vector': state,
@@ -103,39 +119,12 @@ def build_case_batch(case_plan, batch_size):
     return config, current_inputs, state_vectors
 
 
-def run_chunked_rollout(case_plan, current_inputs, state_vectors, batch_size, backend, integrate_trajectory, integrate_trajectory_batch):
-    from slurm.simulation import (simulate_time_batches,
-                                  simulate_time_batches_batch)
-
-    config = case_plan['config']
-    thresholds = case_plan['thresholds']
-    time_batches = case_plan['time_batches']
-    sample_stride = int(case_plan['sample_stride'])
-    sample_neurons = int(case_plan['sample_neurons'] or config['n_n'])
-
+def run_chunked_rollout(case_plan, runner, current_inputs, state_vectors, batch_size):
     if batch_size == 1:
-        output, _ = simulate_time_batches(
-            config,
-            current_inputs[0],
-            state_vectors[0],
-            time_batches,
-            thresholds,
-            backend=backend,
-            sample_stride=sample_stride,
-            sample_neurons=sample_neurons,
-        )
+        output, _ = runner.run_time_batches(state_vectors[0], current_inputs[0])
         return output
 
-    output, _ = simulate_time_batches_batch(
-        config,
-        current_inputs,
-        state_vectors,
-        time_batches,
-        thresholds,
-        backend=backend,
-        sample_stride=sample_stride,
-        sample_neurons=sample_neurons,
-    )
+    output, _ = runner.run_time_batches_batch(state_vectors, current_inputs)
     return output
 
 
@@ -154,14 +143,33 @@ def run_worker(args):
     if args.xla_flags_append:
         os.environ['IODOR_XLA_FLAGS_APPEND'] = ' '.join(args.xla_flags_append)
 
-    from slurm.trial_setup import configure_runtime_environment
+    from intermittent_odors.builders import configure_runtime_environment
 
     os.environ.update(configure_runtime_environment(ROOT, os.environ.copy()))
 
-    from shared.backend import integrate_trajectory, integrate_trajectory_batch
+    from intermittent_odors.experiment import (build_experiment_spec,
+                                               infer_input_dt_from_times)
+    from intermittent_odors.runtime import compile_experiment
 
     case_plan = build_case_plan(args)
     config, current_inputs, state_vectors = build_case_batch(case_plan, args.batch_size)
+    experiment = case_plan.get('experiment_spec')
+    if experiment is None:
+        experiment = build_experiment_spec(
+            config,
+            case_plan['current_input'],
+            case_plan['state_vector'],
+            case_plan['times'],
+            case_plan['thresholds'],
+            input_dt=infer_input_dt_from_times(case_plan['times']),
+            sample_stride=case_plan['sample_stride'],
+            sample_neurons=case_plan['sample_neurons'],
+            time_batches=case_plan['time_batches'],
+            metadata={'topology': case_plan['topology'], 'case': args.case},
+            network_metadata={'family': case_plan['topology']},
+            stimulus_metadata={'family': case_plan['topology']},
+        )
+    runner = compile_experiment(experiment, backend=args.backend)
 
     timings = []
     output = None
@@ -170,31 +178,15 @@ def run_worker(args):
         if args.case == 'realistic-slurm':
             output = run_chunked_rollout(
                 case_plan,
+                runner,
                 current_inputs,
                 state_vectors,
                 args.batch_size,
-                args.backend,
-                integrate_trajectory,
-                integrate_trajectory_batch,
             )
         elif args.batch_size == 1:
-            output = integrate_trajectory(
-                config,
-                current_inputs[0],
-                state_vectors[0],
-                case_plan['times'],
-                case_plan['thresholds'],
-                backend=args.backend,
-            )
+            output = runner.run(state_vectors[0], current_inputs[0], case_plan['times'])
         else:
-            output = integrate_trajectory_batch(
-                config,
-                current_inputs,
-                state_vectors,
-                case_plan['times'],
-                case_plan['thresholds'],
-                backend=args.backend,
-            )
+            output = runner.run_batch(state_vectors, current_inputs, case_plan['times'])
         timings.append(time.perf_counter() - start)
 
     np.save(args.output, output)

@@ -5,6 +5,8 @@ from pathlib import Path
 
 import numpy as np
 
+from intermittent_odors.experiment import build_experiment_spec
+
 
 @dataclass(frozen=True)
 class TrialSettings:
@@ -20,6 +22,17 @@ class TrialSettings:
     min_block: int = 50
     batch_ms: int = 1000
     switch_prob: float = 0.1
+
+
+@dataclass(frozen=True)
+class TrialCase:
+    ach_mat: np.ndarray
+    fgaba_mat: np.ndarray
+    sgaba_mat: np.ndarray
+    current_input: np.ndarray
+    state_vector: np.ndarray
+    times: np.ndarray
+    time_batches: tuple[np.ndarray, ...]
 
 
 def load_trial_settings(env=None):
@@ -49,15 +62,15 @@ def build_trial_case(graph_no, odor_seed, trial_seed, network_dir, settings, det
     )
     times = build_timepoints(settings)
     time_batches = split_timepoints(times, settings)
-    return {
-        'ach_mat': ach_mat,
-        'fgaba_mat': fgaba_mat,
-        'sgaba_mat': sgaba_mat,
-        'current_input': current_input,
-        'state_vector': state_vector,
-        'times': times,
-        'time_batches': time_batches,
-    }
+    return TrialCase(
+        ach_mat=np.asarray(ach_mat, dtype=np.float64),
+        fgaba_mat=np.asarray(fgaba_mat, dtype=np.float64),
+        sgaba_mat=np.asarray(sgaba_mat, dtype=np.float64),
+        current_input=np.asarray(current_input, dtype=np.float64),
+        state_vector=np.asarray(state_vector, dtype=np.float64),
+        times=np.asarray(times, dtype=np.float64),
+        time_batches=tuple(np.asarray(batch, dtype=np.float64) for batch in time_batches),
+    )
 
 
 def build_connectivity_matrices(graph_no, network_dir, settings):
@@ -177,11 +190,47 @@ def prepare_case_directory(cache_root, graph_no, odor_seed, trial_seed):
 
 
 def write_case_inputs(case_dir, case):
-    np.save(case_dir / 'state_vector.npy', case['state_vector'])
-    np.save(case_dir / 'ach_mat.npy', case['ach_mat'])
-    np.save(case_dir / 'fgaba_mat.npy', case['fgaba_mat'])
-    np.save(case_dir / 'sgaba_mat.npy', case['sgaba_mat'])
-    np.save(case_dir / 'current_input.npy', case['current_input'])
+    np.save(case_dir / 'state_vector.npy', case.state_vector)
+    np.save(case_dir / 'ach_mat.npy', case.ach_mat)
+    np.save(case_dir / 'fgaba_mat.npy', case.fgaba_mat)
+    np.save(case_dir / 'sgaba_mat.npy', case.sgaba_mat)
+    np.save(case_dir / 'current_input.npy', case.current_input)
+
+
+def trial_case_to_experiment_spec(case, settings, metadata=None):
+    from slurm.simulation import (build_fire_thresholds, build_slurm_config,
+                                  sample_stride_from_sim_res)
+
+    config = build_slurm_config(
+        case.ach_mat,
+        case.fgaba_mat,
+        case.sgaba_mat,
+        n_n=settings.n_n,
+        p_n=settings.p_n,
+        l_n=settings.l_n,
+    )
+    thresholds = build_fire_thresholds(settings.p_n, settings.l_n)
+    merged_metadata = {
+        'family': 'slurm-trial',
+        'n_n': settings.n_n,
+        'p_n': settings.p_n,
+        'l_n': settings.l_n,
+        **({} if metadata is None else metadata),
+    }
+    return build_experiment_spec(
+        config,
+        case.current_input,
+        case.state_vector,
+        case.times,
+        thresholds,
+        input_dt=settings.sim_res,
+        sample_stride=sample_stride_from_sim_res(settings.sim_res),
+        sample_neurons=settings.n_n,
+        time_batches=case.time_batches,
+        metadata=merged_metadata,
+        network_metadata={'family': 'slurm-trial'},
+        stimulus_metadata={'family': 'slurm-trial'},
+    )
 
 
 def load_output_dataset(case_dir):
@@ -243,3 +292,24 @@ def configure_runtime_environment(root, env=None):
 
     _append_env_flags(env, 'XLA_FLAGS', env.get('IODOR_XLA_FLAGS_APPEND'))
     return env
+
+
+__all__ = [
+    'TrialCase',
+    'TrialSettings',
+    'build_connectivity_matrices',
+    'build_current_input',
+    'build_state_vector',
+    'build_timepoints',
+    'build_trial_case',
+    'configure_runtime_environment',
+    'load_output_dataset',
+    'load_trial_settings',
+    'make_noise_rng',
+    'prepare_case_directory',
+    'sorted_output_files',
+    'split_timepoints',
+    'stable_seed',
+    'trial_case_to_experiment_spec',
+    'write_case_inputs',
+]

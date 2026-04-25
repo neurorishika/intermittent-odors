@@ -2,7 +2,7 @@ import jax
 import jax.numpy as jnp
 import numpy as np
 
-from shared.jax_precision import JAX_DTYPE, to_jax_dtype
+from intermittent_odors.jax_precision import JAX_DTYPE, to_jax_dtype
 
 
 def K_prop(V):
@@ -89,6 +89,18 @@ def _input_index_at_time(t, input_scale, input_steps):
     return jnp.clip(index, 0, input_steps - 1)
 
 
+def _get_synapse_layout(config, prefix, n_n):
+    flat_indices = config.get(f'{prefix}_indices')
+    if flat_indices is None:
+        matrix = np.asarray(config[f'{prefix}_mat'], dtype=np.float64)
+        flat_indices = np.flatnonzero(matrix.reshape(-1) != 0.0).astype(np.int32, copy=False)
+    else:
+        flat_indices = np.asarray(flat_indices, dtype=np.int32)
+    row_ids = np.asarray(config.get(f'{prefix}_row_ids', flat_indices // n_n), dtype=np.int32)
+    col_ids = np.asarray(config.get(f'{prefix}_col_ids', flat_indices % n_n), dtype=np.int32)
+    return int(flat_indices.size), jnp.asarray(row_ids, dtype=jnp.int32), jnp.asarray(col_ids, dtype=jnp.int32)
+
+
 def build_dynamics_core(config):
     n_n = int(config['n_n'])
     p_n = int(config['p_n'])
@@ -110,13 +122,9 @@ def build_dynamics_core(config):
     A_Ca = float(config['A_Ca'])
     Ca0 = float(config['Ca0'])
     t_Ca = float(config['t_Ca'])
-    input_scale = jnp.asarray(100.0, dtype=JAX_DTYPE)
+    input_scale = jnp.asarray(float(config.get('input_scale', 100.0)), dtype=JAX_DTYPE)
 
-    ach_mat = np.asarray(config['ach_mat'], dtype=np.float64)
-    ach_mask = ach_mat.reshape(-1) == 1
-    ach_row_ids = jnp.asarray(np.flatnonzero(ach_mask).astype(np.int32) // n_n, dtype=jnp.int32)
-    ach_col_ids = jnp.asarray(np.flatnonzero(ach_mask).astype(np.int32) % n_n, dtype=jnp.int32)
-    n_syn_ach = int(np.sum(ach_mat))
+    n_syn_ach, ach_row_ids, ach_col_ids = _get_synapse_layout(config, 'ach', n_n)
     alp_ach = _to_jax_array(config['alp_ach'])
     bet_ach = _to_jax_array(config['bet_ach'])
     t_max = float(config['t_max'])
@@ -125,11 +133,7 @@ def build_dynamics_core(config):
     g_ach = _to_jax_array(config['g_ach'])
     E_ach = _to_jax_array(config['E_ach'])
 
-    fgaba_mat = np.asarray(config['fgaba_mat'], dtype=np.float64)
-    fgaba_mask = fgaba_mat.reshape(-1) == 1
-    fgaba_row_ids = jnp.asarray(np.flatnonzero(fgaba_mask).astype(np.int32) // n_n, dtype=jnp.int32)
-    fgaba_col_ids = jnp.asarray(np.flatnonzero(fgaba_mask).astype(np.int32) % n_n, dtype=jnp.int32)
-    n_syn_fgaba = int(np.sum(fgaba_mat))
+    n_syn_fgaba, fgaba_row_ids, fgaba_col_ids = _get_synapse_layout(config, 'fgaba', n_n)
     alp_fgaba = _to_jax_array(config['alp_fgaba'])
     bet_fgaba = _to_jax_array(config['bet_fgaba'])
     V0 = _to_jax_array(config['V0'])
@@ -137,11 +141,7 @@ def build_dynamics_core(config):
     g_fgaba = _to_jax_array(config['g_fgaba'])
     E_fgaba = _to_jax_array(config['E_fgaba'])
 
-    sgaba_mat = np.asarray(config['sgaba_mat'], dtype=np.float64)
-    sgaba_mask = sgaba_mat.reshape(-1) == 1
-    sgaba_row_ids = jnp.asarray(np.flatnonzero(sgaba_mask).astype(np.int32) // n_n, dtype=jnp.int32)
-    sgaba_col_ids = jnp.asarray(np.flatnonzero(sgaba_mask).astype(np.int32) % n_n, dtype=jnp.int32)
-    n_syn_sgaba = int(np.sum(sgaba_mat))
+    n_syn_sgaba, sgaba_row_ids, sgaba_col_ids = _get_synapse_layout(config, 'sgaba', n_n)
     K_sgaba = _to_jax_array(config['K_sgaba'])
     r1_sgaba = _to_jax_array(config['r1_sgaba'])
     r2_sgaba = _to_jax_array(config['r2_sgaba'])

@@ -10,8 +10,8 @@ ROOT = Path(__file__).resolve().parent
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from shared.tf_integrator import odeint
-from shared.tf_network import build_dynamics
+from intermittent_odors.tf_integrator import odeint
+from intermittent_odors.tf_network import build_dynamics
 
 
 def normalize_by_indegree(values, matrix):

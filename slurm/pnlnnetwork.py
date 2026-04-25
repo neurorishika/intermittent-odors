@@ -8,7 +8,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from shared.backend import get_backend_name
+from intermittent_odors.runtime import get_backend_name
 
 try:
     from tqdm import tqdm

@@ -1,5 +1,6 @@
 import importlib.util
 import os
+import subprocess
 import sys
 import unittest
 from pathlib import Path
@@ -17,6 +18,7 @@ HAS_NUMPY = _has_module('numpy')
 HAS_TENSORFLOW = _has_module('tensorflow')
 HAS_JAX = _has_module('jax')
 RUN_SCRIPT_PARITY = os.environ.get('IODOR_RUN_SCRIPT_PARITY') == '1'
+RUN_DEVICE_PARITY = os.environ.get('IODOR_RUN_DEVICE_PARITY') == '1'
 RUN_NOTEBOOK_NUMERICAL_EQUIVALENCE = os.environ.get('IODOR_RUN_NOTEBOOK_NUMERICAL_EQUIVALENCE') == '1'
 HAS_NOTEBOOK_NUMERICAL_INPUTS = all(
     path.exists()
@@ -30,8 +32,11 @@ HAS_NOTEBOOK_NUMERICAL_INPUTS = all(
 TF_DEPS_MESSAGE = 'Install numpy and tensorflow in the active interpreter to run TensorFlow parity tests.'
 JAX_DEPS_MESSAGE = 'Install numpy, tensorflow, and jax in the active interpreter to run JAX parity tests.'
 SCRIPT_PARITY_MESSAGE = 'Set IODOR_RUN_SCRIPT_PARITY=1 to include the slower fig2/slurm script-level parity checks.'
+DEVICE_PARITY_MESSAGE = 'Set IODOR_RUN_DEVICE_PARITY=1 to include the slower JAX CPU/GPU parity checks.'
 NOTEBOOK_NUMERICAL_MESSAGE = 'Set IODOR_RUN_NOTEBOOK_NUMERICAL_EQUIVALENCE=1 to include slower notebook numerical artifact checks.'
 NOTEBOOK_NUMERICAL_DATA_MESSAGE = 'Notebook numerical artifact checks require the extracted external datasets under data/.'
+GPU_PYTHON = ROOT / '.venv-gpu-bench' / 'bin' / 'python'
+DEVICE_PARITY_ENV_MESSAGE = 'Device parity checks require .venv-gpu-bench/bin/python with a visible JAX GPU backend.'
 
 EXTRA_SYNTHETIC_CASES = (
     {'seed': 3, 'n_n': 8, 'p_n': 5, 'ach_density': 0.15, 'fgaba_density': 0.35, 'sgaba_density': 0.05},
@@ -100,6 +105,27 @@ class JaxParityTests(unittest.TestCase):
         import check_script_jax_parity
 
         check_script_jax_parity.main()
+
+    @unittest.skipUnless(RUN_DEVICE_PARITY, DEVICE_PARITY_MESSAGE)
+    @unittest.skipUnless(GPU_PYTHON.exists(), DEVICE_PARITY_ENV_MESSAGE)
+    def test_jax_cpu_gpu_device_parity(self):
+        completed = subprocess.run(
+            [
+                sys.executable,
+                str(ROOT / 'check_device_parity.py'),
+                '--gpu-python',
+                str(GPU_PYTHON),
+            ],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+        )
+        if completed.returncode != 0:
+            self.fail(
+                'check_device_parity.py failed\n'
+                f'stdout:\n{completed.stdout}\n'
+                f'stderr:\n{completed.stderr}'
+            )
 
     @unittest.skipUnless(RUN_NOTEBOOK_NUMERICAL_EQUIVALENCE, NOTEBOOK_NUMERICAL_MESSAGE)
     @unittest.skipUnless(HAS_NOTEBOOK_NUMERICAL_INPUTS, NOTEBOOK_NUMERICAL_DATA_MESSAGE)

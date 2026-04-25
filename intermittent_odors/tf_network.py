@@ -68,15 +68,34 @@ def KCa_prop(Ca):
     return Ca / (Ca + 2), 100 / (Ca + 2)
 
 
-def _dense_from_sparse(values, mask, n_n):
-    dense = tf.Variable([0.0] * (n_n ** 2), dtype=tf.float64)
-    indices = tf.boolean_mask(tf.range(n_n ** 2), mask)
-    dense = tf.scatter_update(dense, indices, values)
-    return tf.transpose(tf.reshape(dense, (n_n, n_n)))
-
-
 def _to_float64(value):
     return tf.constant(np.asarray(value, dtype=np.float64), dtype=tf.float64)
+
+
+def _to_int32(value):
+    return tf.constant(np.asarray(value, dtype=np.int32), dtype=tf.int32)
+
+
+def _sum_synaptic_current(values, row_ids, V, reversal, conductance, n_n):
+    incoming = tf.math.unsorted_segment_sum(values, row_ids, n_n)
+    return incoming * (V - reversal) * conductance
+
+
+def _input_index_at_time(t, input_scale, input_steps):
+    index = tf.cast(t * input_scale, tf.int32)
+    return tf.clip_by_value(index, 0, input_steps - 1)
+
+
+def _get_synapse_layout(config, prefix, n_n):
+    flat_indices = config.get(f'{prefix}_indices')
+    if flat_indices is None:
+        matrix = np.asarray(config[f'{prefix}_mat'], dtype=np.float64)
+        flat_indices = np.flatnonzero(matrix.reshape(-1) != 0.0).astype(np.int32, copy=False)
+    else:
+        flat_indices = np.asarray(flat_indices, dtype=np.int32)
+    row_ids = np.asarray(config.get(f'{prefix}_row_ids', flat_indices // n_n), dtype=np.int32)
+    col_ids = np.asarray(config.get(f'{prefix}_col_ids', flat_indices % n_n), dtype=np.int32)
+    return int(flat_indices.size), _to_int32(row_ids), _to_int32(col_ids)
 
 
 def build_dynamics(config, current_input):
@@ -100,11 +119,9 @@ def build_dynamics(config, current_input):
     A_Ca = float(config['A_Ca'])
     Ca0 = float(config['Ca0'])
     t_Ca = float(config['t_Ca'])
+    input_scale = float(config.get('input_scale', 100.0))
 
-    ach_mat = np.asarray(config['ach_mat'], dtype=np.float64)
-    ach_mask = ach_mat.reshape(-1) == 1
-    ach_mat_tensor = _to_float64(ach_mat)
-    n_syn_ach = int(np.sum(ach_mat))
+    n_syn_ach, ach_row_ids, ach_col_ids = _get_synapse_layout(config, 'ach', n_n)
     alp_ach = _to_float64(config['alp_ach'])
     bet_ach = _to_float64(config['bet_ach'])
     t_max = float(config['t_max'])
@@ -113,10 +130,7 @@ def build_dynamics(config, current_input):
     g_ach = _to_float64(config['g_ach'])
     E_ach = _to_float64(config['E_ach'])
 
-    fgaba_mat = np.asarray(config['fgaba_mat'], dtype=np.float64)
-    fgaba_mask = fgaba_mat.reshape(-1) == 1
-    fgaba_mat_tensor = _to_float64(fgaba_mat)
-    n_syn_fgaba = int(np.sum(fgaba_mat))
+    n_syn_fgaba, fgaba_row_ids, fgaba_col_ids = _get_synapse_layout(config, 'fgaba', n_n)
     alp_fgaba = _to_float64(config['alp_fgaba'])
     bet_fgaba = _to_float64(config['bet_fgaba'])
     V0 = _to_float64(config['V0'])
@@ -124,10 +138,7 @@ def build_dynamics(config, current_input):
     g_fgaba = _to_float64(config['g_fgaba'])
     E_fgaba = _to_float64(config['E_fgaba'])
 
-    sgaba_mat = np.asarray(config['sgaba_mat'], dtype=np.float64)
-    sgaba_mask = sgaba_mat.reshape(-1) == 1
-    sgaba_mat_tensor = _to_float64(sgaba_mat)
-    n_syn_sgaba = int(np.sum(sgaba_mat))
+    n_syn_sgaba, sgaba_row_ids, sgaba_col_ids = _get_synapse_layout(config, 'sgaba', n_n)
     K_sgaba = _to_float64(config['K_sgaba'])
     r1_sgaba = _to_float64(config['r1_sgaba'])
     r2_sgaba = _to_float64(config['r2_sgaba'])
@@ -157,20 +168,18 @@ def build_dynamics(config, current_input):
         return g_KCa * m * (V - E_KCa)
 
     def I_ach(o, V):
-        o_ = _dense_from_sparse(o, ach_mask, n_n)
-        return tf.reduce_sum(tf.transpose((o_ * (V - E_ach)) * g_ach), 1)
+        return _sum_synaptic_current(o, ach_row_ids, V, E_ach, g_ach, n_n)
 
     def I_fgaba(o, V):
-        o_ = _dense_from_sparse(o, fgaba_mask, n_n)
-        return tf.reduce_sum(tf.transpose((o_ * (V - E_fgaba)) * g_fgaba), 1)
+        return _sum_synaptic_current(o, fgaba_row_ids, V, E_fgaba, g_fgaba, n_n)
 
     def I_sgaba(G, V):
         G4 = tf.pow(G, 4) / (tf.pow(G, 4) + K_sgaba)
-        G_ = _dense_from_sparse(G4, sgaba_mask, n_n)
-        return tf.reduce_sum(tf.transpose((G_ * (V - E_sgaba)) * G_sgaba), 1)
+        return _sum_synaptic_current(G4, sgaba_row_ids, V, E_sgaba, G_sgaba, n_n)
 
     def I_inj_t(t, V):
-        return current_input_tensor[tf.to_int32(t * 100)] * (V - E_ach)
+        index = _input_index_at_time(t, input_scale, tf.shape(current_input_tensor)[0])
+        return current_input_tensor[index] * (V - E_ach)
 
     def dXdt(X, t):
         V_p = X[0:p_n]
@@ -229,13 +238,11 @@ def build_dynamics(config, current_input):
             A,
             tf.zeros(tf.shape(A), dtype=A.dtype),
         )
-        T_ach = tf.multiply(ach_mat_tensor, T_ach)
-        T_ach = tf.boolean_mask(tf.reshape(T_ach, (-1,)), ach_mask)
+        T_ach = tf.gather(T_ach, ach_col_ids)
         do_achdt = alp_ach * (1.0 - o_ach) * T_ach - bet_ach * o_ach
 
         T_fgaba = 1.0 / (1.0 + tf.exp(-(V - V0) / sigma))
-        T_fgaba = tf.multiply(fgaba_mat_tensor, T_fgaba)
-        T_fgaba = tf.boolean_mask(tf.reshape(T_fgaba, (-1,)), fgaba_mask)
+        T_fgaba = tf.gather(T_fgaba, fgaba_col_ids)
         do_fgabadt = alp_fgaba * (1.0 - o_fgaba) * T_fgaba - bet_fgaba * o_fgaba
 
         dg_sgabadt = -r4_sgaba * g_sgaba + r3_sgaba * r_sgaba
@@ -245,8 +252,7 @@ def build_dynamics(config, current_input):
             A,
             tf.zeros(tf.shape(A), dtype=A.dtype),
         )
-        T_sgaba = tf.multiply(sgaba_mat_tensor, T_sgaba)
-        T_sgaba = tf.boolean_mask(tf.reshape(T_sgaba, (-1,)), sgaba_mask)
+        T_sgaba = tf.gather(T_sgaba, sgaba_col_ids)
         dr_sgabadt = r1_sgaba * (1.0 - r_sgaba) * T_sgaba - r2_sgaba * r_sgaba
 
         dfdt = tf.zeros(tf.shape(fire_t), dtype=fire_t.dtype)

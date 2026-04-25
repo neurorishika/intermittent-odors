@@ -7,8 +7,9 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from shared.backend import (get_backend_name, get_sampled_integrator_runner,
-                            get_sampled_integrator_runner_batch)
+from intermittent_odors.experiment import (ensure_prepared_experiment,
+                                           infer_input_dt_from_batches)
+from intermittent_odors.runtime import compile_experiment
 
 
 def build_fire_thresholds(p_n, l_n):
@@ -110,56 +111,16 @@ def simulate_time_batches(
     sample_neurons=None,
     progress=None,
 ):
-    backend_name = get_backend_name(backend)
-    sample_neurons = int(sample_neurons or config['n_n'])
-    current_input = np.asarray(current_input, dtype=np.float64)
-    runner = get_sampled_integrator_runner(
+    experiment = ensure_prepared_experiment(
         config,
-        current_input,
-        thresholds,
-        sample_stride,
+        thresholds=thresholds,
+        input_dt=infer_input_dt_from_batches(time_batches),
+        sample_stride=sample_stride,
         sample_neurons=sample_neurons,
-        backend=backend_name,
+        time_batches=time_batches,
     )
-
-    if backend_name == 'jax':
-        import jax
-        import jax.numpy as jnp
-
-        from shared.jax_precision import NP_DTYPE
-
-        state_vector = jax.device_put(np.asarray(state_vector, dtype=NP_DTYPE))
-        prepared_time_batches = [
-            jax.device_put(np.asarray(time_batch, dtype=NP_DTYPE))
-            for time_batch in time_batches
-        ]
-    else:
-        state_vector = np.asarray(state_vector, dtype=np.float64)
-        prepared_time_batches = [np.asarray(time_batch, dtype=np.float64) for time_batch in time_batches]
-
-    sampled_outputs = []
-
-    iterator = enumerate(prepared_time_batches)
-    if progress is not None:
-        iterator = progress(iterator, total=len(prepared_time_batches))
-
-    for _, time_batch in iterator:
-        sampled, state_vector = runner(state_vector, time_batch)
-        sampled_outputs.append(sampled)
-
-    if backend_name == 'jax':
-        if sampled_outputs:
-            output = np.asarray(jnp.concatenate(sampled_outputs, axis=0), dtype=np.float64)
-        else:
-            output = np.zeros((0, sample_neurons), dtype=np.float64)
-        final_state = np.asarray(state_vector, dtype=np.float64)
-        return output, final_state
-
-    if sampled_outputs:
-        output = np.concatenate(sampled_outputs, axis=0)
-    else:
-        output = np.zeros((0, sample_neurons), dtype=np.float64)
-    return output, state_vector
+    runner = compile_experiment(experiment, backend=backend)
+    return runner.run_time_batches(state_vector, np.asarray(current_input, dtype=np.float64), progress=progress)
 
 
 def simulate_time_batches_batch(
@@ -173,54 +134,13 @@ def simulate_time_batches_batch(
     sample_neurons=None,
     progress=None,
 ):
-    backend_name = get_backend_name(backend)
-    sample_neurons = int(sample_neurons or config['n_n'])
-    batch_size = int(np.asarray(state_vectors).shape[0])
-    current_inputs = np.asarray(current_inputs, dtype=np.float64)
-    runner = get_sampled_integrator_runner_batch(
+    experiment = ensure_prepared_experiment(
         config,
-        current_inputs,
-        thresholds,
-        sample_stride,
+        thresholds=thresholds,
+        input_dt=infer_input_dt_from_batches(time_batches),
+        sample_stride=sample_stride,
         sample_neurons=sample_neurons,
-        backend=backend_name,
+        time_batches=time_batches,
     )
-
-    if backend_name == 'jax':
-        import jax
-        import jax.numpy as jnp
-
-        from shared.jax_precision import NP_DTYPE
-
-        state_vectors = jax.device_put(np.asarray(state_vectors, dtype=NP_DTYPE))
-        prepared_time_batches = [
-            jax.device_put(np.asarray(time_batch, dtype=NP_DTYPE))
-            for time_batch in time_batches
-        ]
-    else:
-        state_vectors = np.asarray(state_vectors, dtype=np.float64)
-        prepared_time_batches = [np.asarray(time_batch, dtype=np.float64) for time_batch in time_batches]
-
-    sampled_outputs = []
-
-    iterator = enumerate(prepared_time_batches)
-    if progress is not None:
-        iterator = progress(iterator, total=len(prepared_time_batches))
-
-    for _, time_batch in iterator:
-        sampled, state_vectors = runner(state_vectors, time_batch)
-        sampled_outputs.append(sampled)
-
-    if backend_name == 'jax':
-        if sampled_outputs:
-            output = np.asarray(jnp.concatenate(sampled_outputs, axis=1), dtype=np.float64)
-        else:
-            output = np.zeros((batch_size, 0, sample_neurons), dtype=np.float64)
-        final_state = np.asarray(state_vectors, dtype=np.float64)
-        return output, final_state
-
-    if sampled_outputs:
-        output = np.concatenate(sampled_outputs, axis=1)
-    else:
-        output = np.zeros((batch_size, 0, sample_neurons), dtype=np.float64)
-    return output, state_vectors
+    runner = compile_experiment(experiment, backend=backend)
+    return runner.run_time_batches_batch(state_vectors, np.asarray(current_inputs, dtype=np.float64), progress=progress)

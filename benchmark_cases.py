@@ -2,8 +2,11 @@ from pathlib import Path
 
 import numpy as np
 
-from slurm.trial_setup import (TrialSettings, build_timepoints,
-                               build_trial_case, split_timepoints, stable_seed)
+from intermittent_odors.builders import (TrialSettings, build_timepoints,
+                                         build_trial_case, split_timepoints,
+                                         stable_seed,
+                                         trial_case_to_experiment_spec)
+from intermittent_odors.experiment import build_experiment_spec
 
 ROOT = Path(__file__).resolve().parent
 
@@ -319,14 +322,19 @@ def build_realistic_trial_case(
             settings,
             deterministic_staging=True,
         )
-        ach_mat = np.asarray(case['ach_mat'], dtype=np.float64)
-        fgaba_mat = np.asarray(case['fgaba_mat'], dtype=np.float64)
-        sgaba_mat = np.asarray(case['sgaba_mat'], dtype=np.float64)
-        current_input = np.asarray(case['current_input'], dtype=np.float64)
-        state_vector = np.asarray(case['state_vector'], dtype=np.float64)
-        time_batches = [np.asarray(batch, dtype=np.float64) for batch in case['time_batches']]
-        times = np.asarray(case['times'], dtype=np.float64)
+        ach_mat = np.asarray(case.ach_mat, dtype=np.float64)
+        fgaba_mat = np.asarray(case.fgaba_mat, dtype=np.float64)
+        sgaba_mat = np.asarray(case.sgaba_mat, dtype=np.float64)
+        current_input = np.asarray(case.current_input, dtype=np.float64)
+        state_vector = np.asarray(case.state_vector, dtype=np.float64)
+        time_batches = [np.asarray(batch, dtype=np.float64) for batch in case.time_batches]
+        times = np.asarray(case.times, dtype=np.float64)
         topology = 'exact-production'
+        experiment_spec = trial_case_to_experiment_spec(
+            case,
+            settings,
+            metadata={'topology': topology, 'case': 'realistic-slurm'},
+        )
     else:
         ach_mat, fgaba_mat, sgaba_mat = build_scaled_connectivity_matrices(graph_no, settings)
         current_input = build_scaled_current_input(graph_no, odor_seed, trial_seed, settings)
@@ -334,11 +342,27 @@ def build_realistic_trial_case(
         times = build_timepoints(settings)
         time_batches = split_timepoints(times, settings)
         topology = 'scaled-production-like'
+        thresholds = [0.0] * settings.p_n + [-20.0] * settings.l_n
+        experiment_spec = build_experiment_spec(
+            build_realistic_config(settings, ach_mat, fgaba_mat, sgaba_mat),
+            current_input,
+            state_vector,
+            times,
+            thresholds,
+            input_dt=settings.sim_res,
+            sample_stride=max(1, int(round(float(sample_every_ms) / settings.sim_res))),
+            sample_neurons=settings.n_n,
+            time_batches=time_batches,
+            metadata={'topology': topology, 'case': 'realistic-slurm'},
+            network_metadata={'family': 'scaled-production-like'},
+            stimulus_metadata={'family': 'scaled-production-like'},
+        )
 
     config = build_realistic_config(settings, ach_mat, fgaba_mat, sgaba_mat)
     sample_stride = max(1, int(round(float(sample_every_ms) / settings.sim_res)))
     thresholds = [0.0] * settings.p_n + [-20.0] * settings.l_n
     return {
+        'experiment_spec': experiment_spec,
         'config': config,
         'current_input': current_input,
         'state_vector': state_vector,

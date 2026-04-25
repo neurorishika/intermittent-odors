@@ -3,13 +3,16 @@ import shutil
 import sys
 from pathlib import Path
 
-from simulation import (build_fire_thresholds, build_slurm_config,
-                        sample_stride_from_sim_res, simulate_time_batches,
-                        split_pnlnnetwork_timepoints)
+from simulation import split_pnlnnetwork_timepoints
 from tqdm import tqdm
-from trial_setup import (build_trial_case, configure_runtime_environment,
-                         load_trial_settings, prepare_case_directory,
-                         write_case_inputs)
+
+from intermittent_odors.builders import (build_trial_case,
+                                         configure_runtime_environment,
+                                         load_trial_settings,
+                                         prepare_case_directory,
+                                         trial_case_to_experiment_spec,
+                                         write_case_inputs)
+from intermittent_odors.runtime import compile_experiment
 
 
 def main(argv=None):
@@ -38,31 +41,23 @@ def main(argv=None):
     )
     write_case_inputs(case_dir, case)
     os.environ.update(configure_runtime_environment(root, os.environ.copy()))
-
-    config = build_slurm_config(
-        case['ach_mat'],
-        case['fgaba_mat'],
-        case['sgaba_mat'],
-        n_n=settings.n_n,
-        p_n=settings.p_n,
-        l_n=settings.l_n,
+    experiment_spec = trial_case_to_experiment_spec(
+        case,
+        settings,
+        metadata={'graph_no': graph_no, 'odor_seed': odor_seed, 'trial_seed': trial_seed},
     )
-    thresholds = build_fire_thresholds(settings.p_n, settings.l_n)
+    runner = compile_experiment(experiment_spec)
 
     success = False
     try:
         expanded_time_batches = []
-        for time_batch in case['time_batches']:
+        for time_batch in case.time_batches:
             expanded_time_batches.extend(split_pnlnnetwork_timepoints(time_batch, settings.sim_res))
 
-        dataset, final_state = simulate_time_batches(
-            config,
-            case['current_input'],
-            case['state_vector'],
-            expanded_time_batches,
-            thresholds,
-            sample_stride=sample_stride_from_sim_res(settings.sim_res),
-            sample_neurons=settings.n_n,
+        dataset, final_state = runner.run_time_batches(
+            case.state_vector,
+            case.current_input,
+            time_batches=expanded_time_batches,
             progress=tqdm,
         )
         np.save(data_dir / f'data_{graph_no}_{odor_seed}_{trial_seed}', dataset)
