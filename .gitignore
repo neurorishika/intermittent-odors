@@ -1,6 +1,8 @@
 .ipynb_checkpoints
 */.ipynb_checkpoints/*
 **/*.ipynb_checkpoints/
+.venv/
+.venv*/
 __pycache__
 */__pycache__/*
 **/__pycache__/
@@ -9,3 +11,18 @@ __pycache__
 *.gif
 *.npy
 *.zip
+.vscode/
+*/.vscode/*
+**/.vscode/
+data/data.zip.001
+data/data.zip.002
+data/data.zip.003
+data/data.zip.004
+data/data.zip.005
+data/data.zip.006
+data/data.zip.007
+data/data.zip.008
+data/data.zip.009
+data/data.zip.010
+data/data.zip.011
+data/data.zip.012

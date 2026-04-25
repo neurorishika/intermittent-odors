@@ -4,20 +4,19 @@
 # In[1]:
 
 
-from tqdm import tqdm
-import tensorflow.compat.v1 as tf
-import networkx as nx
-from scipy.linalg import block_diag
-from subprocess import call
-import matplotlib.pyplot as plt
-import numpy as np
+import glob
 import os
 import re
-import time
-import glob
 import sys
+import time
+from subprocess import call
 
-tf.disable_v2_behavior()
+import matplotlib.pyplot as plt
+import networkx as nx
+import numpy as np
+from scipy.linalg import block_diag
+from tqdm import tqdm
+
 os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
 
 
@@ -201,4 +200,5 @@ plt.close(fig)
 
 
 
+# In[ ]:
 # In[ ]:
