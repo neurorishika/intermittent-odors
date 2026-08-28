@@ -143,7 +143,7 @@ def run_worker(args):
     if args.xla_flags_append:
         os.environ['IODOR_XLA_FLAGS_APPEND'] = ' '.join(args.xla_flags_append)
 
-    from intermittent_odors.builders import configure_runtime_environment
+    from slurm.builders import configure_runtime_environment
 
     os.environ.update(configure_runtime_environment(ROOT, os.environ.copy()))
 

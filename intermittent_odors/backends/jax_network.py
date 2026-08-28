@@ -2,7 +2,7 @@ import jax
 import jax.numpy as jnp
 import numpy as np
 
-from intermittent_odors.jax_precision import JAX_DTYPE, to_jax_dtype
+from intermittent_odors.backends.jax_precision import JAX_DTYPE, to_jax_dtype
 
 
 def K_prop(V):

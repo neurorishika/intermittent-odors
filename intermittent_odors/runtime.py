@@ -100,7 +100,7 @@ class CompiledExperimentRunner:
             import jax
             import jax.numpy as jnp
 
-            from intermittent_odors.jax_precision import NP_DTYPE
+            from intermittent_odors.backends.jax_precision import NP_DTYPE
 
             state_vector = jax.device_put(np.asarray(state_vector, dtype=NP_DTYPE))
             prepared_time_batches = [
@@ -143,7 +143,7 @@ class CompiledExperimentRunner:
             import jax
             import jax.numpy as jnp
 
-            from intermittent_odors.jax_precision import NP_DTYPE
+            from intermittent_odors.backends.jax_precision import NP_DTYPE
 
             state_vectors = jax.device_put(np.asarray(state_vectors, dtype=NP_DTYPE))
             prepared_time_batches = [
@@ -332,10 +332,9 @@ def _get_compiled_jax_integrator(experiment, current_input):
 
     import jax
 
-    from intermittent_odors.jax_integrator import odeint
-    from intermittent_odors.jax_network import build_dynamics_core
+    from intermittent_odors.backends.jax_integrator import odeint
 
-    dXdt = build_dynamics_core(experiment.config)
+    dXdt = _get_dynamics_fn(experiment)
     n_n = int(experiment.config['n_n'])
     compiled = jax.jit(
         lambda state, current_input_tensor, trajectory_times, fire_thresholds: odeint(
@@ -360,10 +359,9 @@ def _get_compiled_jax_batch_integrator(experiment, current_inputs):
 
     import jax
 
-    from intermittent_odors.jax_integrator import odeint
-    from intermittent_odors.jax_network import build_dynamics_core
+    from intermittent_odors.backends.jax_integrator import odeint
 
-    dXdt = build_dynamics_core(experiment.config)
+    dXdt = _get_dynamics_fn(experiment)
     n_n = int(experiment.config['n_n'])
 
     def integrate_single(state, current_input_tensor, trajectory_times, fire_thresholds):
@@ -393,10 +391,9 @@ def _get_compiled_jax_sampled_integrator(experiment, current_input):
 
     import jax
 
-    from intermittent_odors.jax_integrator import odeint_sampled
-    from intermittent_odors.jax_network import build_dynamics_core
+    from intermittent_odors.backends.jax_integrator import odeint_sampled
 
-    dXdt = build_dynamics_core(experiment.config)
+    dXdt = _get_dynamics_fn(experiment)
     n_n = int(experiment.config['n_n'])
     compiled = jax.jit(
         lambda state, current_input_tensor, trajectory_times, fire_thresholds: odeint_sampled(
@@ -427,10 +424,9 @@ def _get_compiled_jax_sampled_batch_integrator(experiment, current_inputs):
 
     import jax
 
-    from intermittent_odors.jax_integrator import odeint_sampled
-    from intermittent_odors.jax_network import build_dynamics_core
+    from intermittent_odors.backends.jax_integrator import odeint_sampled
 
-    dXdt = build_dynamics_core(experiment.config)
+    dXdt = _get_dynamics_fn(experiment)
     n_n = int(experiment.config['n_n'])
 
     def integrate_single(state, current_input_tensor, trajectory_times, fire_thresholds):
@@ -479,11 +475,28 @@ def _fingerprint_jax_problem(experiment, current_input):
     hasher.update(_get_jax_precision_mode().encode('utf-8'))
     if isinstance(experiment, PreparedExperiment):
         hasher.update(experiment.model_digest.encode('utf-8'))
+        if experiment.dynamics_builder is not None:
+            # Prevent cache collisions with custom dynamics functions.
+            # id() is stable within a session; cross-session JIT recompiles anyway.
+            hasher.update(f'custom_dyn:{id(experiment.dynamics_builder)}'.encode('utf-8'))
     else:
         raise TypeError('Expected a PreparedExperiment when building a JAX cache key.')
     hasher.update(b'current_input')
     _hash_array_signature(hasher, current_input)
     return hasher.hexdigest()
+
+
+def _get_dynamics_fn(experiment):
+    """Return dXdt(X, t, input_tensor) for this experiment.
+
+    For standard experiments ``dynamics_builder`` is None and we delegate to
+    the unchanged ``build_dynamics_core`` in ``jax_network.py``.
+    For custom network models the stored callable is used instead.
+    """
+    if getattr(experiment, 'dynamics_builder', None) is not None:
+        return experiment.dynamics_builder(experiment.config)
+    from intermittent_odors.backends.jax_network import build_dynamics_core
+    return build_dynamics_core(experiment.config)
 
 
 def _hash_array_signature(hasher, value):
@@ -493,13 +506,13 @@ def _hash_array_signature(hasher, value):
 
 
 def _get_jax_numpy_dtype():
-    from intermittent_odors.jax_precision import NP_DTYPE
+    from intermittent_odors.backends.jax_precision import NP_DTYPE
 
     return NP_DTYPE
 
 
 def _get_jax_precision_mode():
-    from intermittent_odors.jax_precision import PRECISION_MODE
+    from intermittent_odors.backends.jax_precision import PRECISION_MODE
 
     return PRECISION_MODE
 
@@ -507,8 +520,8 @@ def _get_jax_precision_mode():
 def _integrate_tensorflow(experiment, current_input, state_vector, times):
     import tensorflow.compat.v1 as tf
 
-    from intermittent_odors.tf_integrator import odeint
-    from intermittent_odors.tf_network import build_dynamics
+    from intermittent_odors.backends.tf_integrator import odeint
+    from intermittent_odors.backends.tf_network import build_dynamics
 
     with tf.Graph().as_default():
         tf.disable_v2_behavior()

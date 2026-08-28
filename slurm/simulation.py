@@ -16,75 +16,18 @@ def build_fire_thresholds(p_n, l_n):
     return [0.0] * p_n + [-20.0] * l_n
 
 
-def normalize_by_indegree(values, matrix):
-    indegree = np.sum(matrix, axis=1)
-    output = np.zeros_like(values, dtype=np.float64)
-    np.divide(values, indegree, out=output, where=indegree != 0)
-    return output
-
-
 def build_slurm_config(ach_mat, fgaba_mat, sgaba_mat, n_n=120, p_n=90, l_n=30):
-    n_syn_ach = int(np.sum(ach_mat))
-    n_syn_fgaba = int(np.sum(fgaba_mat))
-    n_syn_sgaba = int(np.sum(sgaba_mat))
+    from intermittent_odors.model import pnln_network
+    from intermittent_odors.stimulus.odor import IntermittentOdorParams
 
-    g_ach = normalize_by_indegree(
-        np.array([0.0] * p_n + [2 * 90 * 0.5 * 0.1 * 0.05] * l_n, dtype=np.float64),
-        ach_mat,
+    params = IntermittentOdorParams(n_n=n_n, p_n=p_n, l_n=l_n)
+    g_ach, g_fgaba, G_sgaba = params.base_conductances()
+    net = pnln_network(
+        p_n, l_n, ach_mat, fgaba_mat, sgaba_mat,
+        g_ach=g_ach, g_fgaba=g_fgaba, G_sgaba=G_sgaba,
+        normalize_conductances=True,
     )
-    g_fgaba = normalize_by_indegree(
-        np.array([0.3 * 6 * 1.2] * p_n + [30 * 0.2 / 2 * 1.2] * l_n, dtype=np.float64),
-        fgaba_mat,
-    )
-    G_sgaba = normalize_by_indegree(
-        np.array([0.3 * 6 * 0.03] * p_n + [0.0] * l_n, dtype=np.float64),
-        sgaba_mat,
-    )
-
-    return {
-        'n_n': n_n,
-        'p_n': p_n,
-        'l_n': l_n,
-        'C_m': [1.0] * n_n,
-        'g_K': [3.6] * p_n + [36.0] * l_n,
-        'g_L': [0.3] * n_n,
-        'E_K': [-95.0] * p_n + [-95.0] * l_n,
-        'E_L': [-64.0] * p_n + [-50.0] * l_n,
-        'g_Na': [7.15] * p_n,
-        'g_A': [1.43] * p_n,
-        'E_Na': [50.0] * p_n,
-        'E_A': [-95.0] * p_n,
-        'g_Ca': [5.0] * l_n,
-        'g_KCa': [0.045] * l_n,
-        'E_Ca': [140.0] * l_n,
-        'E_KCa': [-95.0] * l_n,
-        'A_Ca': 2e-4,
-        'Ca0': 2.4e-4,
-        't_Ca': 150.0,
-        'ach_mat': ach_mat,
-        'alp_ach': [10.0] * n_syn_ach,
-        'bet_ach': [0.2] * n_syn_ach,
-        't_max': 0.3,
-        't_delay': 0.0,
-        'A': [0.5] * n_n,
-        'g_ach': g_ach,
-        'E_ach': [0.0] * n_n,
-        'fgaba_mat': fgaba_mat,
-        'alp_fgaba': [10.0] * n_syn_fgaba,
-        'bet_fgaba': [0.16] * n_syn_fgaba,
-        'V0': [-20.0] * n_n,
-        'sigma': [1.5] * n_n,
-        'g_fgaba': g_fgaba,
-        'E_fgaba': [-70.0] * n_n,
-        'sgaba_mat': sgaba_mat,
-        'K_sgaba': [100e-12] * n_syn_sgaba,
-        'r1_sgaba': [1.0] * n_syn_sgaba,
-        'r2_sgaba': [0.025] * n_syn_sgaba,
-        'r3_sgaba': [0.1] * n_syn_sgaba,
-        'r4_sgaba': [0.06] * n_syn_sgaba,
-        'G_sgaba': G_sgaba,
-        'E_sgaba': [-95.0] * n_n,
-    }
+    return net.to_config_dict()
 
 
 def sample_stride_from_sim_res(sim_res):

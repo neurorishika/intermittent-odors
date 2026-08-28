@@ -13,9 +13,11 @@ if str(ROOT) not in sys.path:
 
 from check_shared_tf_parity import build_case, build_repo_production_case
 from check_shared_tf_parity import evaluate as evaluate_tf
-from intermittent_odors.jax_integrator import odeint as jax_odeint
-from intermittent_odors.jax_network import build_dynamics as build_jax_dynamics
-from intermittent_odors.tf_network import build_dynamics as build_tf_dynamics
+from intermittent_odors.backends.jax_integrator import odeint as jax_odeint
+from intermittent_odors.backends.jax_network import \
+    build_dynamics as build_jax_dynamics
+from intermittent_odors.backends.tf_network import \
+    build_dynamics as build_tf_dynamics
 
 
 def max_abs_diff(left, right):

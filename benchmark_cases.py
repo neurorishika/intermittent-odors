@@ -2,11 +2,10 @@ from pathlib import Path
 
 import numpy as np
 
-from intermittent_odors.builders import (TrialSettings, build_timepoints,
-                                         build_trial_case, split_timepoints,
-                                         stable_seed,
-                                         trial_case_to_experiment_spec)
 from intermittent_odors.experiment import build_experiment_spec
+from slurm.builders import (TrialSettings, build_timepoints, build_trial_case,
+                            split_timepoints, stable_seed,
+                            trial_case_to_experiment_spec)
 
 ROOT = Path(__file__).resolve().parent
 

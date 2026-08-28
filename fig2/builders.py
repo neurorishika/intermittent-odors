@@ -125,4 +125,4 @@ def _coerce_profile(profile, p_n, l_n, default):
     profile = np.asarray(profile, dtype=np.float64)
     if profile.shape == (p_n + l_n,):
         return np.ascontiguousarray(profile)
-    raise ValueError(f'Expected a profile of shape {(p_n + l_n,)}, got {profile.shape}.')
+    raise ValueError(f'Expected a profile of shape {(p_n + l_n,)}, got {profile.shape}')

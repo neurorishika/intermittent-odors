@@ -8,13 +8,12 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from intermittent_odors.builders import (TrialCase, TrialSettings,
-                                         build_fig2_experiment_spec,
-                                         piecewise_profile,
-                                         trial_case_to_experiment_spec)
+from fig2.builders import build_fig2_experiment_spec, piecewise_profile
 from intermittent_odors.experiment import (build_experiment_spec,
                                            ensure_prepared_experiment,
                                            prepare_experiment)
+from slurm.builders import (TrialCase, TrialSettings,
+                            trial_case_to_experiment_spec)
 
 
 def _build_config(fgaba_scale=1.0):

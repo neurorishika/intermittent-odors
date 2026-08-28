@@ -3,15 +3,12 @@ import shutil
 import sys
 from pathlib import Path
 
+from builders import (build_trial_case, configure_runtime_environment,
+                      load_trial_settings, prepare_case_directory,
+                      trial_case_to_experiment_spec, write_case_inputs)
 from simulation import split_pnlnnetwork_timepoints
 from tqdm import tqdm
 
-from intermittent_odors.builders import (build_trial_case,
-                                         configure_runtime_environment,
-                                         load_trial_settings,
-                                         prepare_case_directory,
-                                         trial_case_to_experiment_spec,
-                                         write_case_inputs)
 from intermittent_odors.runtime import compile_experiment
 
 

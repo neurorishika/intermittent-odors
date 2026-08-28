@@ -95,6 +95,23 @@ Use `prepare_experiment(...)` to normalize a model config, precompute synapse la
 
 For CPU/GPU JAX parity verification, run `python check_device_parity.py --gpu-python .venv-gpu-bench/bin/python`. The default CPU path uses `.venv/bin/python`, and the GPU path disables JAX preallocation so parity checks can share the device with other workloads more reliably.
 
+### Module Documentation
+
+A MkDocs Material documentation site now lives under `docs/` with site configuration in `mkdocs.yml`.
+
+Install the docs dependencies and serve the site locally with:
+
+```bash
+pip install -r requirements-docs.txt
+mkdocs serve
+```
+
+Build the static site with:
+
+```bash
+mkdocs build --strict
+```
+
 ### Associated Datasets
 R. Mohanta and C. Assisi. 2021. Intermittent inputs reveal invariant odor representations (Part 1). Retrieved from https://osf.io/7d46t/  
 R. Mohanta and C. Assisi. 2021. Intermittent inputs reveal invariant odor representations (Part 2). Retrieved from https://osf.io/skrwn/

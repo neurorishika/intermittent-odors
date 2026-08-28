@@ -1,0 +1,47 @@
+:root {
+  --iodor-hero-start: #0f766e;
+  --iodor-hero-end: #164e63;
+  --iodor-surface: rgba(255, 255, 255, 0.72);
+}
+
+[data-md-color-scheme="slate"] {
+  --iodor-surface: rgba(15, 23, 42, 0.54);
+}
+
+.hero {
+  margin: 0 0 1.5rem;
+  padding: 2.2rem 1.4rem;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, var(--iodor-hero-start), var(--iodor-hero-end));
+  color: #f8fafc;
+  box-shadow: 0 20px 45px rgba(15, 118, 110, 0.2);
+}
+
+.hero h1 {
+  margin-top: 0;
+  color: inherit;
+}
+
+.hero p,
+.hero a {
+  color: inherit;
+}
+
+.card-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  margin: 1.5rem 0;
+}
+
+.card-grid h3 {
+  margin-top: 0;
+}
+
+.card-grid > * {
+  padding: 1rem;
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  border-radius: 0.9rem;
+  background: var(--iodor-surface);
+  backdrop-filter: blur(10px);
+}

@@ -6,6 +6,8 @@ import numpy as np
 
 DEFAULT_INPUT_DT = 0.01
 
+_SENTINEL = object()   # used as default for optional-override parameters
+
 
 @dataclass(frozen=True)
 class NetworkSpec:
@@ -95,6 +97,20 @@ class ExperimentSpec:
             prepared = prepared.with_overrides(**overrides)
         return prepared
 
+    def compile(self, backend=None):
+        """Compile this experiment and return a ready-to-run ``CompiledExperimentRunner``.
+
+        Shortcut for ``CompiledExperimentRunner(self.prepare(), backend=backend)``.
+
+        Parameters
+        ----------
+        backend : str, optional
+            ``'jax'`` or ``'tensorflow'``.  Defaults to the ``IODOR_BACKEND``
+            environment variable (fallback: ``'tensorflow'``).
+        """
+        from intermittent_odors.runtime import CompiledExperimentRunner
+        return CompiledExperimentRunner(self.prepare(), backend=backend)
+
     @property
     def current_input(self):
         return self.stimulus.current_input
@@ -134,6 +150,10 @@ class PreparedExperiment:
     time_batches: tuple[np.ndarray, ...] = ()
     metadata: dict = field(default_factory=dict)
     model_digest: str = field(init=False)
+    # Optional custom dynamics builder for non-standard networks (see model.py).
+    # When set, runtime.py calls dynamics_builder(config) instead of
+    # the default build_dynamics_core.  Not included in model_digest.
+    dynamics_builder: object = field(default=None, repr=False, compare=False, hash=False)
 
     def __post_init__(self):
         normalized_config = _normalize_config(self.config, input_dt=self.input_dt)
@@ -166,7 +186,7 @@ class PreparedExperiment:
     def l_n(self):
         return int(self.config['l_n'])
 
-    def with_overrides(self, *, input_dt=None, sample_stride=None, sample_neurons=None, time_batches=None, metadata=None):
+    def with_overrides(self, *, input_dt=None, sample_stride=None, sample_neurons=None, time_batches=None, metadata=None, dynamics_builder=_SENTINEL):
         return PreparedExperiment(
             config=dict(self.config),
             thresholds=self.thresholds,
@@ -175,6 +195,7 @@ class PreparedExperiment:
             sample_neurons=self.sample_neurons if sample_neurons is None else int(sample_neurons),
             time_batches=self.time_batches if time_batches is None else tuple(time_batches),
             metadata=dict(self.metadata) if metadata is None else metadata,
+            dynamics_builder=self.dynamics_builder if dynamics_builder is _SENTINEL else dynamics_builder,
         )
 
 

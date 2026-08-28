@@ -1,7 +1,7 @@
 import jax
 import jax.numpy as jnp
 
-from intermittent_odors.jax_precision import JAX_DTYPE
+from intermittent_odors.backends.jax_precision import JAX_DTYPE
 
 
 def jax_check_type(t, y0):

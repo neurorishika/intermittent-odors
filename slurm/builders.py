@@ -198,18 +198,22 @@ def write_case_inputs(case_dir, case):
 
 
 def trial_case_to_experiment_spec(case, settings, metadata=None):
-    from slurm.simulation import (build_fire_thresholds, build_slurm_config,
-                                  sample_stride_from_sim_res)
+    from intermittent_odors.model import pnln_network
+    from intermittent_odors.stimulus.odor import IntermittentOdorParams
 
-    config = build_slurm_config(
+    params = IntermittentOdorParams(n_n=settings.n_n, p_n=settings.p_n, l_n=settings.l_n)
+    g_ach, g_fgaba, G_sgaba = params.base_conductances()
+    net = pnln_network(
+        settings.p_n,
+        settings.l_n,
         case.ach_mat,
         case.fgaba_mat,
         case.sgaba_mat,
-        n_n=settings.n_n,
-        p_n=settings.p_n,
-        l_n=settings.l_n,
+        g_ach=g_ach,
+        g_fgaba=g_fgaba,
+        G_sgaba=G_sgaba,
+        normalize_conductances=True,
     )
-    thresholds = build_fire_thresholds(settings.p_n, settings.l_n)
     merged_metadata = {
         'family': 'slurm-trial',
         'n_n': settings.n_n,
@@ -218,13 +222,13 @@ def trial_case_to_experiment_spec(case, settings, metadata=None):
         **({} if metadata is None else metadata),
     }
     return build_experiment_spec(
-        config,
+        net.to_config_dict(),
         case.current_input,
         case.state_vector,
         case.times,
-        thresholds,
+        net.fire_thresholds(),
         input_dt=settings.sim_res,
-        sample_stride=sample_stride_from_sim_res(settings.sim_res),
+        sample_stride=max(1, int(round(1.0 / settings.sim_res))),
         sample_neurons=settings.n_n,
         time_batches=case.time_batches,
         metadata=merged_metadata,
@@ -292,24 +296,3 @@ def configure_runtime_environment(root, env=None):
 
     _append_env_flags(env, 'XLA_FLAGS', env.get('IODOR_XLA_FLAGS_APPEND'))
     return env
-
-
-__all__ = [
-    'TrialCase',
-    'TrialSettings',
-    'build_connectivity_matrices',
-    'build_current_input',
-    'build_state_vector',
-    'build_timepoints',
-    'build_trial_case',
-    'configure_runtime_environment',
-    'load_output_dataset',
-    'load_trial_settings',
-    'make_noise_rng',
-    'prepare_case_directory',
-    'sorted_output_files',
-    'split_timepoints',
-    'stable_seed',
-    'trial_case_to_experiment_spec',
-    'write_case_inputs',
-]

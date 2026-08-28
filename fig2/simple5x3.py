@@ -17,12 +17,11 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from intermittent_odors.builders import (build_fig2_experiment_spec,
-                                         piecewise_profile)
+from builders import build_fig2_experiment_spec, piecewise_profile
+
 from intermittent_odors.runtime import compile_experiment, get_backend_name
 
 metadata = np.load('__simcache__/metadata.npy', allow_pickle=True).item()
-sim_res = float(metadata['sim_res'])
 t = np.load('__simcache__/time.npy')[int(sys.argv[1])]
 current_input = np.load('__simcache__/current_input.npy')
 state_vector = np.load('__simcache__/state_vector.npy')
@@ -42,19 +41,10 @@ runner = compile_experiment(experiment_spec, backend=backend)
 print(f'Using {backend} backend...')
 
 t_ = time.time()
-states = []
-
-for batch_index, batch_times in tqdm(enumerate(np.array_split(t, 1))):
-    if batch_index > 0:
-        batch_times = np.append(batch_times[0] - sim_res, batch_times)
-
-    state = runner.run(state_vector, current_input, batch_times)
-    state_vector = state[-1, :]
-    states.append(state[::experiment_spec.sample_stride, :][:-1, :])
-
-state = np.concatenate(states)
+state, final_state_vector = runner.run_time_batches(
+    state_vector, current_input, progress=tqdm,
+)
 print('Completed. Total Execution Time:', np.round(time.time() - t_, 3), 'secs')
 
-np.save('__simcache__/state_vector.npy', state_vector)
-np.save(f'__simoutput__/state_{sys.argv[1]}.npy', state)
+np.save('__simcache__/state_vector.npy', final_state_vector)
 np.save(f'__simoutput__/state_{sys.argv[1]}.npy', state)
