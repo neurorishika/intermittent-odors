@@ -145,10 +145,11 @@ def resolve_python(path, fallback):
     return fallback if fallback.exists() else Path(sys.executable)
 
 
-def query_jax_runtime(python_path, platform):
+def query_jax_runtime(python_path, platform, precision='float64'):
     env = os.environ.copy()
     env['JAX_PLATFORM_NAME'] = platform
-    env['IODOR_JAX_PRECISION'] = 'float64'
+    env['IODOR_JAX_PRECISION'] = precision
+    env['IODOR_ALLOW_REDUCED_PRECISION'] = '1'
     env['XLA_PYTHON_CLIENT_PREALLOCATE'] = 'false'
     command = [
         str(python_path),
@@ -172,10 +173,12 @@ def query_jax_runtime(python_path, platform):
     return json.loads(lines[-1])
 
 
-def run_case(python_path, platform, case_name, output_path):
+def run_case(python_path, platform, case_name, output_path, precision='float64'):
     env = os.environ.copy()
     env['IODOR_BACKEND'] = 'jax'
-    env['IODOR_JAX_PRECISION'] = 'float64'
+    env['IODOR_JAX_PRECISION'] = precision
+    # Comparing reduced precision across devices is the point of --precision.
+    env['IODOR_ALLOW_REDUCED_PRECISION'] = '1'
     env['JAX_PLATFORM_NAME'] = platform
     env['XLA_PYTHON_CLIENT_PREALLOCATE'] = 'false'
     env.setdefault('MPLBACKEND', 'Agg')
@@ -220,10 +223,23 @@ def parse_args(argv=None):
     parser.add_argument('--output')
     parser.add_argument('--cpu-python')
     parser.add_argument('--gpu-python')
-    parser.add_argument('--atol', type=float, default=1e-10)
-    parser.add_argument('--rtol', type=float, default=1e-10)
+    parser.add_argument('--precision', choices=['float64', 'float32'], default='float64',
+                        help='IODOR_JAX_PRECISION to run both devices at.')
+    parser.add_argument('--atol', type=float, default=None,
+                        help='Absolute tolerance (default: 1e-10 for float64, 1e-2 for float32).')
+    parser.add_argument('--rtol', type=float, default=None,
+                        help='Relative tolerance (default: 1e-10 for float64, 1e-2 for float32).')
     parser.add_argument('--skip-realistic-slurm', action='store_true')
-    return parser.parse_args(argv)
+    args = parser.parse_args(argv)
+
+    # float32 accumulates ~7 decimal digits, so CPU/GPU reduction-order differences
+    # show up far above the float64 threshold. Compare at a precision-appropriate bar.
+    default_tolerance = 1e-10 if args.precision == 'float64' else 1e-2
+    if args.atol is None:
+        args.atol = default_tolerance
+    if args.rtol is None:
+        args.rtol = default_tolerance
+    return args
 
 
 def main(argv=None):
@@ -241,8 +257,9 @@ def main(argv=None):
     if not gpu_python.exists():
         raise SystemExit(f'GPU Python interpreter not found: {gpu_python}')
 
-    cpu_runtime = query_jax_runtime(cpu_python, 'cpu')
-    gpu_runtime = query_jax_runtime(gpu_python, 'gpu')
+    cpu_runtime = query_jax_runtime(cpu_python, 'cpu', args.precision)
+    gpu_runtime = query_jax_runtime(gpu_python, 'gpu', args.precision)
+    print(f'precision={args.precision} atol={args.atol} rtol={args.rtol}')
     print(f'cpu_python={cpu_python}')
     print(f'cpu_devices={cpu_runtime["devices"]}')
     print(f'gpu_python={gpu_python}')
@@ -262,8 +279,8 @@ def main(argv=None):
         for case_name in cases:
             cpu_output = temp_root / f'{case_name}_cpu.npz'
             gpu_output = temp_root / f'{case_name}_gpu.npz'
-            cpu_payload = run_case(cpu_python, 'cpu', case_name, cpu_output)
-            gpu_payload = run_case(gpu_python, 'gpu', case_name, gpu_output)
+            cpu_payload = run_case(cpu_python, 'cpu', case_name, cpu_output, args.precision)
+            gpu_payload = run_case(gpu_python, 'gpu', case_name, gpu_output, args.precision)
             compare_case(case_name, cpu_payload, gpu_payload, args.atol, args.rtol)
 
     print('JAX CPU/GPU parity checks passed.')

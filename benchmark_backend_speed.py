@@ -132,6 +132,9 @@ def run_worker(args):
     os.environ.pop('IODOR_JAX_PRECISION', None)
     if args.precision:
         os.environ['IODOR_JAX_PRECISION'] = args.precision
+        # Measuring the reduced-precision modes is the point of this harness, so
+        # opt out of the guards that block them for production runs.
+        os.environ['IODOR_ALLOW_REDUCED_PRECISION'] = '1'
     if args.platform:
         os.environ['JAX_PLATFORM_NAME'] = args.platform
     if args.jax_preallocate is not None:

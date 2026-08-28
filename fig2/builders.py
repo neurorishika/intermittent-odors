@@ -1,4 +1,11 @@
+import sys
+from pathlib import Path
+
 import numpy as np
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 
 from intermittent_odors.experiment import build_experiment_spec
 
@@ -15,6 +22,172 @@ def piecewise_profile(p_n, l_n, pn_value, ln_value):
         np.full(int(p_n), float(pn_value), dtype=np.float64),
         np.full(int(l_n), float(ln_value), dtype=np.float64),
     ])
+
+
+BLOCKTIME_MS = 1000
+BUFFER_MS = 500
+SIM_RES_MS = 0.01
+BASELINE_DRIVE = 0.0735
+
+
+def block_pulse_filter(blocktime=BLOCKTIME_MS, sim_res=SIM_RES_MS, fraction=0.1):
+    """Rectangular pulse covering the leading ``fraction`` of each block."""
+    tfilter = np.zeros(int(blocktime / sim_res))
+    tfilter[:int(fraction * blocktime / sim_res)] = 1
+    return tfilter
+
+
+def pn_ramp_filter(blocktime=BLOCKTIME_MS, sim_res=SIM_RES_MS, fraction=0.8):
+    """Rise/plateau/decay envelope used for the PN perturbation drive."""
+    width_red = int(fraction * blocktime / sim_res)
+    return np.concatenate([
+        [0, 0],
+        1 - np.exp(-0.0008 * np.arange(width_red // 12)),
+        0.6 + 0.4 * np.exp(-0.0002 * np.arange(7 * width_red // 12)),
+        0.6 * np.exp(-0.0002 * np.arange(width_red // 3)),
+        np.zeros(int(blocktime / sim_res) // 5),
+    ])
+
+
+def add_input_noise(current_input, scale=0.05, floor=0.001):
+    """Apply the multiplicative-plus-additive drive noise.
+
+    Draws two normal samples in that order; keep the parenthesisation, since the
+    sum is formed before it is added to the drive.
+    """
+    return current_input + (
+        scale * current_input * np.random.normal(size=current_input.shape)
+        + floor * np.random.normal(size=current_input.shape)
+    )
+
+
+def pad_with_buffers(current_input, buffer=BUFFER_MS, sim_res=SIM_RES_MS):
+    """Prepend and append silent buffer periods to a block-structured drive."""
+    silence = np.zeros((current_input.shape[0], int(buffer / sim_res)))
+    return np.concatenate([silence, current_input, silence], axis=1)
+
+
+def block_times(n_blocks, blocktime=BLOCKTIME_MS, buffer=BUFFER_MS, sim_res=SIM_RES_MS):
+    """Simulation timebase for ``n_blocks`` blocks bracketed by buffers."""
+    return np.arange(0, n_blocks * blocktime + 2 * buffer, sim_res)
+
+
+def build_alternating_block_pattern(samplespace, n_blocks, rest_block=None):
+    """Draw a block order in which no odor is presented twice in a row.
+
+    Consumes RNG until it lands on an order with no repeats, matching the
+    rejection loop the fig2 notebook used.
+    """
+    order = np.random.choice(np.arange(len(samplespace)), size=n_blocks)
+    while np.any(np.diff(order) == 0):
+        order = np.random.choice(np.arange(len(samplespace)), size=n_blocks)
+
+    v = [] if rest_block is None else [rest_block]
+    for index in order:
+        v.append(samplespace[index])
+    return np.array(v)
+
+
+def build_shuffled_perturbation_pattern(l_n, n_blocks, leading_zeros=1):
+    """Blocks perturbing a random half of the LNs, preceded by a rest block."""
+    elems = [1] * (l_n // 2) + [0] * (l_n - l_n // 2)
+    v = [[0] * (l_n + leading_zeros)]
+    for _ in range(n_blocks):
+        np.random.shuffle(elems)
+        v.append([0] * leading_zeros + elems)
+    return np.array(v)
+
+
+def build_block_drive_stimulus(
+    n_n,
+    v,
+    perturbation,
+    *,
+    blocktime=BLOCKTIME_MS,
+    buffer=BUFFER_MS,
+    sim_res=SIM_RES_MS,
+    baseline=BASELINE_DRIVE,
+    tfilter=None,
+    noise=True,
+):
+    """Constant baseline drive with a leading perturbation pulse per block.
+
+    Drives the LN-only networks (fig2a,b and fig2e,f,g). ``v`` selects which
+    neurons are perturbed in each block; ``perturbation`` scales that pulse.
+    """
+    width = int(blocktime / sim_res)
+    tfilter_base = np.ones(width)
+    if tfilter is None:
+        tfilter = block_pulse_filter(blocktime, sim_res)
+
+    t = block_times(len(v), blocktime, buffer, sim_res)
+    current_input = np.ones((n_n, t.shape[0] - int(2 * buffer / sim_res)))
+    for i in range(len(v)):
+        block = slice(i * width, (i + 1) * width)
+        current_input[:, block] = baseline * current_input[:, block] * tfilter_base
+        current_input[:, block] += perturbation * (current_input[:, block].T * v[i]).T * tfilter
+
+    current_input = pad_with_buffers(current_input, buffer, sim_res)
+    if noise:
+        current_input = add_input_noise(current_input)
+    return t, current_input
+
+
+def build_pn_ramp_stimulus(
+    n_n,
+    p_n,
+    v,
+    *,
+    blocktime=BLOCKTIME_MS,
+    buffer=BUFFER_MS,
+    sim_res=SIM_RES_MS,
+    baseline=BASELINE_DRIVE,
+    tfilter=None,
+    noise=True,
+):
+    """Ramped perturbation onto the PNs over a constant LN baseline (fig2c,d).
+
+    Unlike :func:`build_block_drive_stimulus` the PN rows carry only the
+    perturbation envelope, with no baseline underneath it.
+    """
+    width = int(blocktime / sim_res)
+    tfilter_base = np.ones(width)
+    if tfilter is None:
+        tfilter = pn_ramp_filter(blocktime, sim_res)
+
+    t = block_times(len(v), blocktime, buffer, sim_res)
+    current_input = np.ones((n_n, t.shape[0] - int(2 * buffer / sim_res)))
+    for i in range(len(v)):
+        block = slice(i * width, (i + 1) * width)
+        current_input[:p_n, block] = (current_input[:p_n, block].T * v[i]).T * tfilter
+        current_input[p_n:, block] = baseline * current_input[p_n:, block] * tfilter_base
+
+    current_input = pad_with_buffers(current_input, buffer, sim_res)
+    if noise:
+        current_input = add_input_noise(current_input)
+    return t, current_input
+
+
+def build_initial_state_vector(
+    n_n,
+    p_n,
+    l_n,
+    sim_time,
+    *,
+    n_syn_ach=0,
+    n_syn_fgaba=0,
+    n_syn_sgaba=0,
+    jitter=0.005,
+):
+    """Resting state with a small multiplicative jitter per trial."""
+    state_vector = np.array(
+        [-45] * p_n + [-45] * l_n
+        + [0.5] * (n_n + 4 * p_n + 3 * l_n)
+        + [2.4 * (10 ** (-4))] * l_n
+        + [0] * (n_syn_ach + n_syn_fgaba + 2 * n_syn_sgaba)
+        + [-(sim_time + 1)] * n_n
+    )
+    return state_vector + jitter * state_vector * np.random.normal(size=state_vector.shape)
 
 
 def build_fig2_experiment_spec(

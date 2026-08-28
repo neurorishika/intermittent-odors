@@ -101,7 +101,19 @@ The refactored accelerated path lives in the `intermittent_odors/` package. The 
 
 The default backend is JAX. Set `IODOR_BACKEND=tensorflow` to select the TensorFlow reference backend.
 
-For CPU/GPU JAX parity verification, run `python check_device_parity.py --gpu-python .venv-gpu-bench/bin/python`. The default CPU path uses `.venv/bin/python`, and the GPU path disables JAX preallocation so parity checks can share the device with other workloads more reliably.
+For CPU/GPU JAX parity verification, run `python check_device_parity.py --gpu-python .venv-gpu-bench/bin/python`. The default CPU path uses `.venv/bin/python`, and the GPU path disables JAX preallocation so parity checks can share the device with other workloads more reliably. Add `--precision float32` to check the reduced-precision path; measured results are recorded in `docs/performance.md`.
+
+#### Regenerating the 30-LN Dataset
+
+`data/30LN/` holds 10 network graphs × 5 perturbation seeds, read by `fig4/supplementary_video1.ipynb` and `tests/test_equivalence.py`. Regenerate one graph's worth with:
+
+```bash
+cd fig2
+python runSimMatrix.py <graphno>          # all five perturbation seeds
+python onlyLNs.py <graphno> <pertseed>    # a single pair
+```
+
+Both refuse to overwrite an existing dataset unless `--force` is passed. `fig2.ipynb` cell 15 covers only `graphno=2, pertseed=59428`; these scripts cover the rest.
 
 ### Module Documentation
 

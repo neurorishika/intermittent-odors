@@ -67,16 +67,34 @@ Convenience constructors:
 
 ## Builder Utilities
 
-`intermittent_odors.builders` exposes high-level helpers that mirror the legacy figure and SLURM workflows.
+Builders live next to the scripts that use them, not in the package. There is no
+`intermittent_odors.builders` module.
 
-Most useful exports:
+`fig2/builders.py` — figure 2 networks, stimuli, and initial states:
 
-- `build_fig2_experiment_spec(...)`
+| Export | Purpose |
+| --- | --- |
+| `build_fig2_experiment_spec(...)` | Assemble a fig2 network as an `ExperimentSpec`. |
+| `build_block_drive_stimulus(...)` | Constant baseline drive with a perturbation pulse per block (LN-only networks). |
+| `build_pn_ramp_stimulus(...)` | Ramped perturbation onto the PNs over a constant LN baseline. |
+| `build_alternating_block_pattern(...)` | Block order in which no odor repeats back-to-back. |
+| `build_shuffled_perturbation_pattern(...)` | Blocks perturbing a random half of the LNs. |
+| `build_initial_state_vector(...)` | Resting state with per-trial multiplicative jitter. |
+| `block_pulse_filter(...)`, `pn_ramp_filter(...)` | The per-block temporal envelopes. |
+| `piecewise_profile(...)` | PN-then-LN parameter profile. |
+
+`slurm/builders.py` — trial staging for the SLURM pipeline:
+
 - `TrialSettings`
 - `TrialCase`
 - `build_trial_case(...)`
 - `trial_case_to_experiment_spec(...)`
 - `configure_runtime_environment(...)`
+
+The fig2 stimulus builders reproduce the original inline notebook code bit-for-bit;
+`tests/test_fig2_stimulus_builders.py` enforces that. They consume the **global**
+numpy RNG, so seed with `np.random.seed(...)` and call them in the documented order
+if you need to reproduce a committed dataset.
 
 ## API Constraints Worth Remembering
 
