@@ -20,6 +20,8 @@ Use the backends for different goals:
 export IODOR_BACKEND=jax          # default; set only to override TensorFlow selection
 export IODOR_JAX_PRECISION=float64
 export JAX_PLATFORM_NAME=gpu
+export IODOR_JAX_SCAN_UNROLL=8    # default; see "Integrator Tuning Knobs"
+export IODOR_JAX_NESTED_SAMPLING=0
 ```
 
 Supported JAX precision modes:
@@ -163,6 +165,68 @@ python benchmark_backend_speed.py --platform cpu --case realistic-slurm \
 `.venv-gpu-bench` has no TensorFlow installed, so the GPU run needs
 `--skip-tensorflow`.
 
+## Integrator Tuning Knobs
+
+Two environment variables tune the `lax.scan` time loop in
+`backends/jax_integrator.py`. Measured on the `realistic-slurm` case
+(120 neurons, 0.01 ms steps, `float64`, warm timings, through
+`run_time_batches(...)` / `run_time_batches_batch(...)`):
+
+| Configuration | CPU batch 1 | GPU batch 32 (aggregate) |
+| --- | --- | --- |
+| `unroll=1` (old behavior) | 326 sim-ms/s | 1459 sim-ms/s |
+| **`unroll=8` (default)** | **367 (+12%)** | **1697 (+16%)** |
+| `unroll=8` + nested sampling (opt-in) | 339 — slower, skip | 1870 (+28%) |
+
+### `IODOR_JAX_SCAN_UNROLL` (default `8`)
+
+Unrolls the time-stepping scan. Unrolling amortizes loop overhead without
+reordering a single floating-point operation, so the output is **bit-for-bit
+identical** to `unroll=1` — verified on samples and final state on both CPU and
+GPU. The cost is compile time (roughly 3–4× at 8: ~1.3 s → ~4.6 s per variant on
+CPU, ~3 s → ~20 s on GPU), which the persistent compilation cache pays once.
+Set `IODOR_JAX_SCAN_UNROLL=1` to restore the old compile times.
+
+### `IODOR_JAX_NESTED_SAMPLING` (default off)
+
+Replaces the per-step `cond` + buffer-write sampling in `integrate_sampled`
+with nested scans: an inner scan over each sampling interval, an outer scan
+that emits one sample per chunk. Sample positions and per-step arithmetic are
+identical, but the different scan structure changes XLA fusion, so results
+drift from the default path by ~1e-22 — **not bitwise identical**.
+
+- Worth it only on GPU: +28% aggregate at batch 32, +15% at batch 1
+  (microbenchmark). On CPU it is *slower* than plain unrolling — don't use it there.
+- Chunked-vs-continuous rollouts remain bitwise identical *within* the mode.
+
+!!! warning "Never regenerate committed datasets with nested sampling"
+    The regeneration bar for `data/` is bitwise equality
+    (`tests/test_time_batching.py`, roadmap item 4). Nested sampling is for
+    throughput-bound GPU sweeps whose outputs are judged on task metrics, not
+    for reproducing committed arrays.
+
+Also tested and **rejected**: `indices_are_sorted=True` on the synaptic
+`segment_sum` (row ids are sorted, but it measured as a wash on CPU) and
+unrolling at GPU batch 1 (neutral).
+
+## CPU Sweeps: Processes Beat `run_batch`
+
+On CPU, `vmap` batching saturates almost immediately (664 aggregate sim-ms/s at
+batch 32, see above) because XLA cannot spread one 120-neuron step across
+cores. Independent *processes* can: on the 16-core benchmark machine, 8
+concurrent single-trial processes each sustained ~185 sim-ms/s — **~1490
+aggregate, 2.2× the best CPU `run_batch` figure** and on par with the GPU at
+batch 32. Going to 16 concurrent processes added nothing (~91 each ≈ 1460
+aggregate); the machine saturates at its physical core count.
+
+So the batching guidance is device-shaped:
+
+- **GPU** → `run_batch(...)` / `run_time_batches_batch(...)` with the largest
+  batch that fits. `vmap` width is exactly what the device wants.
+- **CPU** → one process per trial (SLURM array jobs, `xargs -P`, or a process
+  pool), roughly one per physical core. Keep `run_batch` on CPU only for
+  convenience, not throughput.
+
 ### JAX vs TensorFlow on CPU
 
 The reference backend is far slower. Same case, 200 ms blocktime, batch 1:
@@ -244,8 +308,12 @@ That method uses `experiment.time_batches` by default, so the expensive setup be
 ## Throughput Rules That Actually Matter
 
 - Keep repeated runs shape-stable so the same compiled graph can be reused.
-- Batch across trials when the network and time shapes match.
+- Batch across trials when the network and time shapes match — on the GPU.
+  On CPU, fan out one process per trial instead (see "CPU Sweeps" above).
 - Prefer `run_sampled(...)` or `run_time_batches(...)` when full trajectories are not needed.
+- Keep the default scan unroll; it is bitwise-free throughput. Add
+  `IODOR_JAX_NESTED_SAMPLING=1` only for GPU sweeps that never regenerate
+  committed data.
 - Only lower precision after comparing against a `float64` baseline on your target metric.
 
 ## Precision Tradeoff Guidance

@@ -20,6 +20,42 @@ _JAX_BATCH_SAMPLED_INTEGRATOR_CACHE = {}
 _JAX_CACHE_CONFIGURED = False
 
 
+def sample_phase_for_batch(time_batch, sample_stride):
+    """Local step index of the first sample this time batch should emit.
+
+    Time batches are chained by carrying the previous batch's final state, and
+    ``slurm/builders.py`` overlaps them by one timepoint so no integration step
+    is skipped at the seam. That overlap shifts a batch off the global sampling
+    grid, so each batch is told where the grid falls inside it. Batches that
+    start on a grid point get phase 0 and emit their initial state, exactly as
+    an unbatched rollout does.
+    """
+    stride = int(sample_stride)
+    if stride <= 1:
+        return 0
+
+    times = np.asarray(time_batch, dtype=np.float64)
+    if times.shape[0] < 2:
+        return 0
+
+    dt = float(times[1] - times[0])
+    if dt <= 0:
+        return 0
+
+    start_index = int(round(float(times[0]) / dt))
+    return (-start_index) % stride
+
+
+def sampled_length_for_batch(time_batch, sample_stride):
+    """Number of sampled rows ``run_time_batches`` will emit for one batch."""
+    stride = int(sample_stride)
+    total_steps = int(np.asarray(time_batch).shape[0]) - 1
+    if total_steps <= 0:
+        return 1
+    phase = sample_phase_for_batch(time_batch, stride)
+    return max(0, -(-(total_steps - phase) // stride))
+
+
 def get_backend_name(backend=None):
     raw_backend = backend or os.environ.get('IODOR_BACKEND', 'jax')
     canonical_backend = _BACKEND_ALIASES.get(raw_backend.strip().lower())
@@ -50,25 +86,33 @@ class CompiledExperimentRunner:
         ]
         return np.asarray(outputs, dtype=np.float64)
 
-    def run_sampled(self, state_vector, current_input, times):
+    def run_sampled(self, state_vector, current_input, times, sample_phase=0):
         if self.backend_name == 'jax':
-            return _integrate_jax_sampled(self.experiment, current_input, state_vector, times)
+            return _integrate_jax_sampled(
+                self.experiment, current_input, state_vector, times, sample_phase
+            )
 
         trajectory = _integrate_tensorflow(self.experiment, current_input, state_vector, times)
+        stride = int(self.experiment.sample_stride)
+        phase = int(sample_phase) % stride
         sampled = np.asarray(
-            trajectory[:-1:int(self.experiment.sample_stride), :self.experiment.sample_neurons],
+            trajectory[phase:-1:stride, :self.experiment.sample_neurons],
             dtype=np.float64,
         )
         final_state = np.asarray(trajectory[-1], dtype=np.float64)
         return sampled, final_state
 
-    def run_sampled_batch(self, state_vectors, current_inputs, times):
+    def run_sampled_batch(self, state_vectors, current_inputs, times, sample_phase=0):
         if self.backend_name == 'jax':
-            return _integrate_jax_sampled_batch(self.experiment, current_inputs, state_vectors, times)
+            return _integrate_jax_sampled_batch(
+                self.experiment, current_inputs, state_vectors, times, sample_phase
+            )
 
         trajectory = self.run_batch(state_vectors, current_inputs, times)
+        stride = int(self.experiment.sample_stride)
+        phase = int(sample_phase) % stride
         sampled = np.asarray(
-            trajectory[:, :-1:int(self.experiment.sample_stride), :self.experiment.sample_neurons],
+            trajectory[:, phase:-1:stride, :self.experiment.sample_neurons],
             dtype=np.float64,
         )
         final_state = np.asarray(trajectory[:, -1, :], dtype=np.float64)
@@ -78,8 +122,8 @@ class CompiledExperimentRunner:
         if self.backend_name == 'jax':
             return _get_jax_sampled_runner(self.experiment, current_input)
 
-        def run(state_vector, times):
-            return self.run_sampled(state_vector, current_input, times)
+        def run(state_vector, times, sample_phase=0):
+            return self.run_sampled(state_vector, current_input, times, sample_phase)
 
         return run
 
@@ -87,14 +131,18 @@ class CompiledExperimentRunner:
         if self.backend_name == 'jax':
             return _get_jax_sampled_batch_runner(self.experiment, current_inputs)
 
-        def run(state_vectors, times):
-            return self.run_sampled_batch(state_vectors, current_inputs, times)
+        def run(state_vectors, times, sample_phase=0):
+            return self.run_sampled_batch(state_vectors, current_inputs, times, sample_phase)
 
         return run
 
     def run_time_batches(self, state_vector, current_input, time_batches=None, progress=None):
         time_batches = self.experiment.time_batches if time_batches is None else tuple(time_batches)
         runner = self.get_sampled_runner(current_input)
+        sample_phases = [
+            sample_phase_for_batch(time_batch, self.experiment.sample_stride)
+            for time_batch in time_batches
+        ]
 
         if self.backend_name == 'jax':
             import jax
@@ -116,8 +164,10 @@ class CompiledExperimentRunner:
         if progress is not None:
             iterator = progress(iterator, total=len(prepared_time_batches))
 
-        for _, time_batch in iterator:
-            sampled, state_vector = runner(state_vector, time_batch)
+        for index, time_batch in iterator:
+            sampled, state_vector = runner(
+                state_vector, time_batch, sample_phases[index]
+            )
             sampled_outputs.append(sampled)
 
         if self.backend_name == 'jax':
@@ -138,6 +188,10 @@ class CompiledExperimentRunner:
         time_batches = self.experiment.time_batches if time_batches is None else tuple(time_batches)
         batch_size = int(np.asarray(state_vectors).shape[0])
         runner = self.get_sampled_batch_runner(current_inputs)
+        sample_phases = [
+            sample_phase_for_batch(time_batch, self.experiment.sample_stride)
+            for time_batch in time_batches
+        ]
 
         if self.backend_name == 'jax':
             import jax
@@ -159,8 +213,10 @@ class CompiledExperimentRunner:
         if progress is not None:
             iterator = progress(iterator, total=len(prepared_time_batches))
 
-        for _, time_batch in iterator:
-            sampled, state_vectors = runner(state_vectors, time_batch)
+        for index, time_batch in iterator:
+            sampled, state_vectors = runner(
+                state_vectors, time_batch, sample_phases[index]
+            )
             sampled_outputs.append(sampled)
 
         if self.backend_name == 'jax':
@@ -270,9 +326,9 @@ def _integrate_jax_batch(experiment, current_inputs, state_vectors, times):
     )
 
 
-def _integrate_jax_sampled(experiment, current_input, state_vector, times):
+def _integrate_jax_sampled(experiment, current_input, state_vector, times, sample_phase=0):
     np_dtype = _get_jax_numpy_dtype()
-    compiled = _get_compiled_jax_sampled_integrator(experiment, current_input)
+    compiled = _get_compiled_jax_sampled_integrator(experiment, current_input, sample_phase)
     sampled, final_state = compiled(
         np.asarray(state_vector, dtype=np_dtype),
         np.asarray(current_input, dtype=np_dtype).T,
@@ -282,9 +338,9 @@ def _integrate_jax_sampled(experiment, current_input, state_vector, times):
     return np.asarray(sampled, dtype=np.float64), np.asarray(final_state, dtype=np.float64)
 
 
-def _integrate_jax_sampled_batch(experiment, current_inputs, state_vectors, times):
+def _integrate_jax_sampled_batch(experiment, current_inputs, state_vectors, times, sample_phase=0):
     np_dtype = _get_jax_numpy_dtype()
-    compiled = _get_compiled_jax_sampled_batch_integrator(experiment, current_inputs)
+    compiled = _get_compiled_jax_sampled_batch_integrator(experiment, current_inputs, sample_phase)
     sampled, final_state = compiled(
         np.asarray(state_vectors, dtype=np_dtype),
         np.asarray(current_inputs, dtype=np_dtype).transpose(0, 2, 1),
@@ -298,11 +354,11 @@ def _get_jax_sampled_runner(experiment, current_input):
     import jax
 
     np_dtype = _get_jax_numpy_dtype()
-    compiled = _get_compiled_jax_sampled_integrator(experiment, current_input)
     current_input_tensor = jax.device_put(np.asarray(current_input, dtype=np_dtype).T)
     fire_thresholds = jax.device_put(np.asarray(experiment.thresholds, dtype=np_dtype))
 
-    def run(state_vector, times):
+    def run(state_vector, times, sample_phase=0):
+        compiled = _get_compiled_jax_sampled_integrator(experiment, current_input, sample_phase)
         return compiled(state_vector, current_input_tensor, times, fire_thresholds)
 
     return run
@@ -312,11 +368,13 @@ def _get_jax_sampled_batch_runner(experiment, current_inputs):
     import jax
 
     np_dtype = _get_jax_numpy_dtype()
-    compiled = _get_compiled_jax_sampled_batch_integrator(experiment, current_inputs)
     current_input_tensor = jax.device_put(np.asarray(current_inputs, dtype=np_dtype).transpose(0, 2, 1))
     fire_thresholds = jax.device_put(np.asarray(experiment.thresholds, dtype=np_dtype))
 
-    def run(state_vectors, times):
+    def run(state_vectors, times, sample_phase=0):
+        compiled = _get_compiled_jax_sampled_batch_integrator(
+            experiment, current_inputs, sample_phase
+        )
         return compiled(state_vectors, current_input_tensor, times, fire_thresholds)
 
     return run
@@ -378,10 +436,12 @@ def _get_compiled_jax_batch_integrator(experiment, current_inputs):
     return compiled
 
 
-def _get_compiled_jax_sampled_integrator(experiment, current_input):
+def _get_compiled_jax_sampled_integrator(experiment, current_input, sample_phase=0):
+    sample_phase = int(sample_phase) % int(experiment.sample_stride)
     cache_key = (
         f"{_fingerprint_jax_problem(experiment, current_input)}"
         f"|sample_stride={experiment.sample_stride}|sample_neurons={experiment.sample_neurons}"
+        f"|sample_phase={sample_phase}"
     )
     compiled = _JAX_SAMPLED_INTEGRATOR_CACHE.get(cache_key)
     if compiled is not None:
@@ -404,6 +464,7 @@ def _get_compiled_jax_sampled_integrator(experiment, current_input):
             fire_thresholds,
             experiment.sample_stride,
             experiment.sample_neurons,
+            sample_phase,
         ),
         donate_argnums=(0,),
     )
@@ -411,10 +472,12 @@ def _get_compiled_jax_sampled_integrator(experiment, current_input):
     return compiled
 
 
-def _get_compiled_jax_sampled_batch_integrator(experiment, current_inputs):
+def _get_compiled_jax_sampled_batch_integrator(experiment, current_inputs, sample_phase=0):
+    sample_phase = int(sample_phase) % int(experiment.sample_stride)
     cache_key = (
         f"{_fingerprint_jax_problem(experiment, current_inputs)}"
         f"|sample_stride={experiment.sample_stride}|sample_neurons={experiment.sample_neurons}|batched=1"
+        f"|sample_phase={sample_phase}"
     )
     compiled = _JAX_BATCH_SAMPLED_INTEGRATOR_CACHE.get(cache_key)
     if compiled is not None:
@@ -438,6 +501,7 @@ def _get_compiled_jax_sampled_batch_integrator(experiment, current_inputs):
             fire_thresholds,
             experiment.sample_stride,
             experiment.sample_neurons,
+            sample_phase,
         )
 
     compiled = jax.jit(

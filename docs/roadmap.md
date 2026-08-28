@@ -5,11 +5,17 @@ Tracking document for the JAX rewrite. Check items off as they land.
 The refactor moved the codebase from notebook-local TensorFlow code to the layered
 `model/` → `stimulus/` → `experiment` → `runtime` package.
 
-!!! success "All six items are complete"
+!!! success "Items 1-6 are complete"
     Every simulation entry point now goes through `ExperimentSpec` on the JAX
     backend, and parity is verified on CPU, on GPU, and against the original
-    inline notebook code. The one remaining unchecked box is an optional cleanup
-    of `.ipynb_checkpoints/` directories, left to the maintainer's judgement.
+    inline notebook code.
+
+!!! warning "Item 7 is open"
+    Checking regenerated output against the *committed 2021 data* — rather than
+    against another run of the new code — found two time-batching bugs in the
+    original `fig2` pipeline. The code fixes have landed and are covered by
+    `tests/test_time_batching.py`; what remains is regenerating the affected
+    datasets on the corrected path.
 
 ## Status Summary
 
@@ -26,6 +32,7 @@ The refactor moved the codebase from notebook-local TensorFlow code to the layer
 | `fig2/onlyLNs.py` | Done — ported |
 | `fig2.ipynb` stimulus construction | Done — lifted into `fig2/builders.py` |
 | GPU parity | Done — `float64` ≤ 2.1e-14; GPU up to 3.6× faster once width allows |
+| Time-batch seams (item 7) | Code fixed — chunking is now bitwise-neutral; datasets not yet regenerated |
 
 ## Scope Notes
 
@@ -188,3 +195,69 @@ Recorded with the full tables in `docs/performance.md`.
 - [x] Drop the stale `intermittent_odors.builders` reference from `README.md`
 - [x] Drop the stale `trial_setup.py` reference from `slurm/README.md`
 - [ ] Remove the stale `fig2/.ipynb_checkpoints/` and `modules/.ipynb_checkpoints/` directories if the archived notebook versions are no longer needed (they are gitignored, so this is optional)
+
+## 7. Fix Time-Batch Seams in the fig2 Pipeline
+
+Comparing regenerated output against the committed 2021 data — rather than
+against another run of the new code — turned up two defects in the original
+`fig2` pipeline. Item 3's "bit-for-bit identical" was measured against the new
+pipeline's own subprocess fan-out, so neither was visible there.
+
+**Both bugs are in the 2021 code.** The `slurm/` path was already correct.
+
+- **A dropped sample per batch.** `fig2/simple30.py` ended each chunk with
+  `state[::100][:-1]`. The discarded row is not a duplicate — the next chunk
+  starts 100 steps later — so the committed `data/30LN/` arrays are 28 rows
+  short (6972 instead of 7000) and carry a 2 ms gap at each of the 27 seams,
+  while `onlyLNs.py` reads the row index as milliseconds. Row index drifts
+  26 ms from true time by the end of the rollout.
+- **A skipped integration step per batch.** The chunks came from a disjoint
+  `np.array_split`, so each chunk's carried initial state was relabelled from
+  `t[k-1]` to `t[k]` and the step across the seam was never taken. The rollout
+  took 699,972 steps where a continuous run takes 699,999 — 0.27 ms of
+  simulated time silently lost, with the drive read 0.01 ms early after every
+  seam.
+
+- [x] Overlap time batches by one timepoint (`build_time_batches` in `fig2/builders.py`)
+- [x] Derive a per-batch sampling phase from the batch's start time so the sample grid
+      stays globally uniform across seams (`sample_phase_for_batch` in `runtime.py`,
+      threaded into `integrate_sampled`)
+- [x] Let a batch shorter than the gap to the next grid point emit zero rows instead of
+      raising — caught by `check_script_jax_parity.py` on its scaled-down slurm case
+- [x] Route `fig2.ipynb` cells 4, 9 and 15 and the `simple*.py` fan-out through the same
+      helper, so `data/3LN` and `data/3PN3LN` get the fix too
+- [x] Add `onlyLNs.py --legacy-batching` to reproduce the committed dataset bug-for-bug
+- [x] Lock both behaviours in with `tests/test_time_batching.py`
+
+Verified on `graphno=2, pertseed=59428`, five repetitions, 7000 ms:
+
+| Comparison | Max abs diff |
+| --- | --- |
+| Chunked rollout vs one continuous integration | **0** (bitwise) |
+| `--legacy-batching` vs committed `data/30LN/` | 5.8e-09 |
+| Old disjoint batching vs one continuous integration | 14.76 mV |
+
+Chunking is now an implementation detail with no effect on output, which is the
+property that was missing. The 14.76 mV row is what the 2021 batching cost; spike
+*counts* were unchanged (1571 either way), so the published conclusions stand — it
+is spike-time jitter, not a different answer.
+
+The `slurm/` path gained one thing from the phase work: its samples used to shift
+one step earlier after the first seam, so the last sample of a 13,000 ms trial
+landed at 12998.99 ms. It is now on the grid. No integration steps were ever lost
+there, so the intermittent-odor dataset is unaffected in substance.
+
+### Consequences for the committed data
+
+`data/30LN/` is now the *only* thing that pins the old behaviour, and it is
+reproducible on demand via `--legacy-batching`. The intent is to replace it with
+regenerated, correct data rather than to keep matching it:
+
+- [ ] Regenerate `data/30LN/` (10 graphs × 5 seeds) on the corrected path
+- [ ] Regenerate `data/3LN` and `data/3PN3LN` from `fig2.ipynb` with `recalculate = True`
+- [ ] Re-render the fig2 rasters and `fig4/supplementary_video1.ipynb`, which assume
+      6972 rows
+- [ ] Decide the acceptance bar for the regenerated intermittent-odor dataset — it
+      cannot be element-wise, because the 2021 `single_odor_trial.py` seeded its
+      per-trial noise with a bare `np.random.seed()`, so those realizations are gone.
+      `IODOR_DETERMINISTIC_STAGING=1` makes future runs reproducible.

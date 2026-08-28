@@ -17,12 +17,13 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from builders import build_fig2_experiment_spec, piecewise_profile
+from builders import (build_fig2_experiment_spec, load_time_batch,
+                      piecewise_profile)
 
 from intermittent_odors.runtime import compile_experiment, get_backend_name
 
 metadata = np.load('__simcache__/metadata.npy', allow_pickle=True).item()
-t = np.load('__simcache__/time.npy')[int(sys.argv[1])]
+t = load_time_batch('__simcache__/time.npy', sys.argv[1])
 current_input = np.load('__simcache__/current_input.npy')
 state_vector = np.load('__simcache__/state_vector.npy')
 

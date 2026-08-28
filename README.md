@@ -115,6 +115,12 @@ python onlyLNs.py <graphno> <pertseed>    # a single pair
 
 Both refuse to overwrite an existing dataset unless `--force` is passed. `fig2.ipynb` cell 15 covers only `graphno=2, pertseed=59428`; these scripts cover the rest.
 
+The committed `data/30LN/` arrays are 6972 rows; the corrected pipeline produces 7000. The 2021 fan-out dropped one real sample at each of its 28 time-batch seams and skipped the integration step across each seam — see item 7 in `docs/roadmap.md`. To reproduce the committed files bug-for-bug, for verification rather than for use:
+
+```bash
+python onlyLNs.py <graphno> <pertseed> --legacy-batching --force
+```
+
 ### Module Documentation
 
 A MkDocs Material documentation site now lives under `docs/` with site configuration in `mkdocs.yml`.

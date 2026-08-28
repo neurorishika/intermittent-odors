@@ -19,12 +19,13 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from builders import build_fig2_experiment_spec, piecewise_profile
+from builders import (build_fig2_experiment_spec, load_time_batch,
+                      piecewise_profile)
 
 from intermittent_odors.runtime import compile_experiment, get_backend_name
 
 metadata = np.load(f'__simcache__/metadata_{graphno}_{pertseed}.npy', allow_pickle=True).item()
-t = np.load(f'__simcache__/time_{graphno}_{pertseed}.npy')[int(sys.argv[1])]
+t = load_time_batch(f'__simcache__/time_{graphno}_{pertseed}.npy', sys.argv[1])
 current_input = np.load(f'__simcache__/current_input_{graphno}_{pertseed}.npy')
 state_vector = np.load(f'__simcache__/state_vector_{graphno}_{pertseed}.npy')
 

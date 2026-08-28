@@ -24,6 +24,9 @@ def parse_args(argv=None):
     parser.add_argument('graphno', type=int)
     parser.add_argument('--force', action='store_true',
                         help='Recompute and overwrite existing datasets.')
+    parser.add_argument('--legacy-batching', action='store_true',
+                        help='Pass --legacy-batching through to onlyLNs.py, reproducing '
+                             'the 2021 dataset bug-for-bug.')
     return parser.parse_args(argv)
 
 
@@ -33,6 +36,8 @@ def main(argv=None):
         command = [sys.executable, str(HERE / 'onlyLNs.py'), str(args.graphno), str(pertseed)]
         if args.force:
             command.append('--force')
+        if args.legacy_batching:
+            command.append('--legacy-batching')
         completed = subprocess.run(command, cwd=HERE)
         if completed.returncode != 0:
             return completed.returncode

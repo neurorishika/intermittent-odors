@@ -190,6 +190,44 @@ def build_initial_state_vector(
     return state_vector + jitter * state_vector * np.random.normal(size=state_vector.shape)
 
 
+def build_time_batches(times, n_batches, legacy_batching=False):
+    """Split a rollout into chunks that overlap by one timepoint.
+
+    Each chunk begins on the timepoint the previous chunk ended on, so the state
+    carried across the seam keeps its true time label and the step across the
+    seam is actually taken. The 2021 pipeline used a disjoint ``np.array_split``,
+    which relabelled the carried state one step late and skipped that step
+    entirely -- 27 lost steps over the 30-LN rollout. With the overlap, and with
+    the sampling phase that ``intermittent_odors.runtime`` derives from each
+    chunk's start time, a chunked rollout is bitwise identical to one continuous
+    integration.
+
+    Pass ``legacy_batching=True`` to restore the disjoint 2021 split.
+    """
+    batches = list(np.array_split(np.asarray(times, dtype=np.float64), n_batches))
+    if legacy_batching:
+        return batches
+    for index in range(1, len(batches)):
+        batches[index] = np.append(batches[index - 1][-1], batches[index])
+    return batches
+
+
+def save_time_batches(path, time_batches):
+    """Persist time batches for the ``simple*.py`` subprocess fan-out.
+
+    Overlapping batches differ in length by one, so they cannot be stored as a
+    rectangular array the way the disjoint 2021 batches could.
+    """
+    store = np.empty(len(time_batches), dtype=object)
+    store[:] = [np.asarray(batch, dtype=np.float64) for batch in time_batches]
+    np.save(str(path), store, allow_pickle=True)
+
+
+def load_time_batch(path, index):
+    """Load one batch written by :func:`save_time_batches`."""
+    return np.asarray(np.load(str(path), allow_pickle=True)[int(index)], dtype=np.float64)
+
+
 def build_fig2_experiment_spec(
     metadata,
     current_input,

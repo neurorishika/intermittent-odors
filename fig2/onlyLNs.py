@@ -43,9 +43,11 @@ if str(HERE) not in sys.path:
 
 from builders import (BLOCKTIME_MS, BUFFER_MS, build_block_drive_stimulus,
                       build_fig2_experiment_spec, build_initial_state_vector,
-                      build_shuffled_perturbation_pattern, piecewise_profile)
+                      build_shuffled_perturbation_pattern, build_time_batches,
+                      piecewise_profile)
 
-from intermittent_odors.runtime import compile_experiment, get_backend_name
+from intermittent_odors.runtime import (compile_experiment, get_backend_name,
+                                        sampled_length_for_batch)
 
 DATA_DIR = ROOT / 'data' / '30LN'
 FIGURE_DIR = HERE / 'Figures'
@@ -60,6 +62,25 @@ G_GABA = 1.5
 SIM_RES = 0.01
 # Time chunks per block, matching the batch granularity the subprocess fan-out used.
 BATCHES_PER_BLOCK = 4
+N_TIME_BATCHES = BATCHES_PER_BLOCK * (N_BLOCKS + 2)
+SAMPLE_STRIDE = max(1, int(round(1.0 / SIM_RES)))
+
+
+def drop_legacy_boundary_samples(sampled, time_batches):
+    """Reproduce the 2021 ``state[::100][:-1]`` truncation in ``simple30.py``.
+
+    That slice dropped the last sample of every batch. The dropped rows were not
+    duplicates, so the committed dataset is 28 rows short and carries a 2 ms gap
+    at each of the 27 internal seams while downstream code reads the row index as
+    milliseconds. Kept only so the committed files stay reproducible.
+    """
+    keep = []
+    offset = 0
+    for batch in time_batches:
+        length = sampled_length_for_batch(batch, SAMPLE_STRIDE)
+        keep.extend(range(offset, offset + length - 1))
+        offset += length
+    return sampled[keep]
 
 
 def build_metadata(graphno):
@@ -103,7 +124,7 @@ def build_state_vectors(metadata, sim_time):
     ]
 
 
-def simulate(metadata, current_input, t, state_vectors, pertseed):
+def simulate(metadata, current_input, t, state_vectors, pertseed, legacy_batching=False):
     """Run each repetition through one compiled runner, chained across time batches."""
     spec = build_fig2_experiment_spec(
         metadata,
@@ -119,7 +140,7 @@ def simulate(metadata, current_input, t, state_vectors, pertseed):
     backend = get_backend_name()
     print(f'Using {backend} backend...')
     runner = compile_experiment(spec, backend=backend)
-    time_batches = np.array_split(t, BATCHES_PER_BLOCK * (N_BLOCKS + 2))
+    time_batches = build_time_batches(t, N_TIME_BATCHES, legacy_batching=legacy_batching)
 
     datasets = []
     for rep, state_vector in enumerate(state_vectors):
@@ -127,6 +148,8 @@ def simulate(metadata, current_input, t, state_vectors, pertseed):
         sampled, _ = runner.run_time_batches(
             state_vector, current_input, time_batches=time_batches, progress=tqdm,
         )
+        if legacy_batching:
+            sampled = drop_legacy_boundary_samples(sampled, time_batches)
         datasets.append(sampled[:, 1:31])
     return datasets
 
@@ -177,6 +200,10 @@ def parse_args(argv=None):
     parser.add_argument('pertseed', type=int)
     parser.add_argument('--force', action='store_true',
                         help='Recompute and overwrite an existing dataset.')
+    parser.add_argument('--legacy-batching', action='store_true',
+                        help='Reproduce the 2021 dataset bug-for-bug: disjoint time '
+                             'batches and a dropped sample at each batch boundary, '
+                             'giving 6972 rows instead of 7000.')
     return parser.parse_args(argv)
 
 
@@ -203,7 +230,8 @@ def main(argv=None):
         events = np.load(DATA_DIR / f'LN30_events_{graphno}_{pertseed}.npy', allow_pickle=True)
         current_input = np.load(DATA_DIR / f'LN30_current_{graphno}_{pertseed}.npy', allow_pickle=True)
     else:
-        datasets = simulate(metadata, current_input, t, state_vectors, pertseed)
+        datasets = simulate(metadata, current_input, t, state_vectors, pertseed,
+                            legacy_batching=args.legacy_batching)
         events = spike_events(datasets)
         np.save(data_path, datasets, allow_pickle=True)
         np.save(DATA_DIR / f'LN30_current_{graphno}_{pertseed}.npy', current_input[:, ::100], allow_pickle=True)
