@@ -106,7 +106,7 @@ class ExperimentSpec:
         ----------
         backend : str, optional
             ``'jax'`` or ``'tensorflow'``.  Defaults to the ``IODOR_BACKEND``
-            environment variable (fallback: ``'tensorflow'``).
+            environment variable (fallback: ``'jax'``).
         """
         from intermittent_odors.runtime import CompiledExperimentRunner
         return CompiledExperimentRunner(self.prepare(), backend=backend)

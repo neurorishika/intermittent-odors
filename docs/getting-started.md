@@ -2,17 +2,13 @@
 
 ## Install Runtime Dependencies
 
-For the baseline TensorFlow path:
-
 ```bash
 pip install -r requirements.txt
 ```
 
-For the accelerated JAX path as well:
-
-```bash
-pip install -r requirements.txt -r requirements-jax.txt
-```
+This installs both backends. JAX is the default runtime backend and its pins are
+included from `requirements.txt`; TensorFlow is installed alongside it as the
+parity reference backend.
 
 ## Install Documentation Dependencies
 
@@ -34,22 +30,25 @@ mkdocs build --strict
 
 ## Choose a Backend
 
-=== "JAX"
+JAX is the default backend. Set `IODOR_BACKEND` only when you want to override it.
+
+=== "JAX (default)"
 
     ```bash
-    export IODOR_BACKEND=jax
     export JAX_PLATFORM_NAME=cpu
     ```
 
     Keep `IODOR_JAX_PRECISION=float64` if you want parity-oriented runs.
+    Setting `IODOR_BACKEND=jax` explicitly is equivalent to leaving it unset.
 
-=== "TensorFlow"
+=== "TensorFlow (reference)"
 
     ```bash
     export IODOR_BACKEND=tensorflow
     ```
 
-    This path preserves the legacy TensorFlow 1.x style runtime behavior.
+    This path preserves the legacy TensorFlow 1.x style runtime behavior and is
+    the reference used by the parity checks.
 
 ## Mental Model
 

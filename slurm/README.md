@@ -2,11 +2,11 @@
 
 To run the simulations on the at different intermittencies follow the following steps:
 
-`pnlnnetwork.py` and `single_odor_trial.py` honor `IODOR_BACKEND`. Leave it unset for the legacy TensorFlow path, or set `IODOR_BACKEND=jax` to run the shared JAX backend through the same SLURM-oriented workflow.
+`pnlnnetwork.py` and `single_odor_trial.py` honor `IODOR_BACKEND`. Leave it unset for the default JAX backend, or set `IODOR_BACKEND=tensorflow` to run the legacy TensorFlow reference path through the same SLURM-oriented workflow.
 
-When `IODOR_BACKEND=jax`, `single_odor_trial.py` now provisions a persistent compilation cache under `slurm/__jaxcache__/` unless `IODOR_JAX_COMPILATION_CACHE_DIR` or `JAX_COMPILATION_CACHE_DIR` is already set. Override the directory explicitly if you want cache reuse across multiple working directories or nodes.
+On the JAX backend, `single_odor_trial.py` provisions a persistent compilation cache under `slurm/__jaxcache__/` unless `IODOR_JAX_COMPILATION_CACHE_DIR` or `JAX_COMPILATION_CACHE_DIR` is already set. Override the directory explicitly if you want cache reuse across multiple working directories or nodes.
 
-1. Set the intermittency ie. switch probability via `IODOR_SWITCH_PROB`, or change the default in `trial_setup.py` if you want to bake a new baseline into the SLURM workflow.
+1. Set the intermittency ie. switch probability via `IODOR_SWITCH_PROB`, or change the default in `builders.py` if you want to bake a new baseline into the SLURM workflow.
 2. Set the correct directory location on Line 5 of `initiate_odor_trial.sh`.
 3. Clear the existing Data directory. Make sure the directory is **not** deleted.
 4. Generate the simulation list by running `initialize_simulation_list.py`.

@@ -16,8 +16,7 @@ except ImportError:
     def tqdm(iterable, *args, **kwargs):
         return iterable
 
-from simulation import (build_fire_thresholds, build_slurm_config,
-                        sample_stride_from_sim_res, simulate_time_batches,
+from simulation import (build_slurm_experiment_spec, simulate_time_batches,
                         split_pnlnnetwork_timepoints)
 
 SIM_RES = 0.01
@@ -41,23 +40,24 @@ def main(argv=None):
     state_vector = np.load(f"{case_dir}/state_vector.npy")
     timepoints = np.load(f"{case_dir}/timepoint.npy")
 
-    config = build_slurm_config(ach_mat, fgaba_mat, sgaba_mat, n_n=N_N, p_n=P_N, l_n=L_N)
-    thresholds = build_fire_thresholds(P_N, L_N)
+    spec = build_slurm_experiment_spec(
+        ach_mat,
+        fgaba_mat,
+        sgaba_mat,
+        current_input,
+        state_vector,
+        timepoints,
+        n_n=N_N,
+        p_n=P_N,
+        l_n=L_N,
+        sim_res=SIM_RES,
+        time_batches=split_pnlnnetwork_timepoints(timepoints, SIM_RES),
+    )
     backend = get_backend_name()
     print(f"Using {backend} backend...")
 
     t_start = time.time()
-    state, final_state = simulate_time_batches(
-        config,
-        current_input,
-        state_vector,
-        split_pnlnnetwork_timepoints(timepoints, SIM_RES),
-        thresholds,
-        backend=backend,
-        sample_stride=sample_stride_from_sim_res(SIM_RES),
-        sample_neurons=N_N,
-        progress=tqdm,
-    )
+    state, final_state = simulate_time_batches(spec, backend=backend, progress=tqdm)
     print("Completed. Total Execution Time:", np.round(time.time() - t_start, 3), "secs")
 
     np.save(f"{case_dir}/output_{batch_index}.npy", state)

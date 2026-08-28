@@ -1,3 +1,7 @@
+# JAX is the default backend, so its pins install by default.
+# TensorFlow below remains the parity reference backend.
+-r requirements-jax.txt
+
 elephant==0.10.0
 imageio==2.9.0
 matplotlib==3.3.4

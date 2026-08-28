@@ -1,9 +1,14 @@
 import math
 import re
+import sys
 from dataclasses import dataclass
 from pathlib import Path
 
 import numpy as np
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 
 from intermittent_odors.experiment import build_experiment_spec
 
@@ -274,7 +279,7 @@ def _append_env_flags(env, key, extra_flags):
 
 def configure_runtime_environment(root, env=None):
     env = dict(env or {})
-    backend = env.get('IODOR_BACKEND', 'tensorflow').strip().lower()
+    backend = env.get('IODOR_BACKEND', 'jax').strip().lower()
     if backend != 'jax':
         return env
 

@@ -21,7 +21,7 @@ _JAX_CACHE_CONFIGURED = False
 
 
 def get_backend_name(backend=None):
-    raw_backend = backend or os.environ.get('IODOR_BACKEND', 'tensorflow')
+    raw_backend = backend or os.environ.get('IODOR_BACKEND', 'jax')
     canonical_backend = _BACKEND_ALIASES.get(raw_backend.strip().lower())
     if canonical_backend is None:
         supported = ', '.join(sorted(_BACKEND_ALIASES))

@@ -13,6 +13,8 @@ The following python packages are also required to be installed:
 ```
 elephant==0.10.0
 imageio==2.9.0
+jax==0.4.30
+jaxlib==0.4.30
 matplotlib==3.3.4
 neo==0.10.0
 networkx==2.5
@@ -59,11 +61,13 @@ The script-level parity check is slower and mutates temporary cache outputs, so 
 IODOR_RUN_SCRIPT_PARITY=1 python -m unittest -v tests.test_equivalence
 ```
 
-These checks require an interpreter with the numerical stack installed. In a compatible environment, install the base dependencies and JAX extras with:
+These checks require an interpreter with the numerical stack installed. In a compatible environment, install everything with:
 
 ```bash
-pip install -r requirements.txt -r requirements-jax.txt
+pip install -r requirements.txt
 ```
+
+`requirements.txt` includes the JAX pins from `requirements-jax.txt`, so both backends are available after a single install.
 
 #### Backend Speed Benchmarking
 Use `benchmark_backend_speed.py` to compare TensorFlow against the shared JAX path on a representative case and measure reduced-precision tradeoffs explicitly.
@@ -88,10 +92,14 @@ The `120`-neuron case uses the exact production PN/LN topology. Other `--n-neuro
 
 The shared JAX path defaults to `IODOR_JAX_PRECISION=float64` to preserve parity. For exploratory speed/parity benchmarking, the benchmark harness can also run `float32` and experimental `bfloat16` modes in isolated subprocesses.
 
-#### Prepared Experiment API
-The refactored accelerated path now lives in the `intermittent_odors/` package. The canonical runtime entrypoints are `intermittent_odors.experiment` for experiment preparation/spec construction, `intermittent_odors.runtime` for compiled runners, and `intermittent_odors.builders` for higher-level figure or SLURM experiment builders.
+#### Experiment API
+The refactored accelerated path lives in the `intermittent_odors/` package. The canonical runtime entrypoints are `intermittent_odors.experiment` for experiment/spec construction and `intermittent_odors.runtime` for compiled runners. Figure- and SLURM-specific builders live next to their scripts in `fig2/builders.py` and `slurm/builders.py`.
 
-Use `prepare_experiment(...)` to normalize a model config, precompute synapse layouts, and attach rollout metadata such as `sample_stride`, `sample_neurons`, and input timestep. For higher-level experiment design, build an `ExperimentSpec` with `build_experiment_spec(...)` or one of the package builders, then call `compile_experiment(...)` to obtain a reusable backend runner with `run(...)`, `run_batch(...)`, `run_time_batches(...)`, and `run_time_batches_batch(...)` methods. This is the preferred interface for new JAX experiment code because it preserves compile reuse across repeated runs while avoiding shape-only cache collisions between different same-shaped network topologies.
+**`ExperimentSpec` is the single supported entry point.** Build one with `build_experiment_spec(...)` or one of the script-local builders, then call `spec.compile(backend=...)` to obtain a reusable backend runner with `run(...)`, `run_batch(...)`, `run_time_batches(...)`, and `run_time_batches_batch(...)` methods. This preserves compile reuse across repeated runs while avoiding shape-only cache collisions between different same-shaped network topologies.
+
+`prepare_experiment(...)` and the raw config-dictionary form of `ensure_prepared_experiment(...)` remain as internal adapters for legacy configs; new code should not call them directly.
+
+The default backend is JAX. Set `IODOR_BACKEND=tensorflow` to select the TensorFlow reference backend.
 
 For CPU/GPU JAX parity verification, run `python check_device_parity.py --gpu-python .venv-gpu-bench/bin/python`. The default CPU path uses `.venv/bin/python`, and the GPU path disables JAX preallocation so parity checks can share the device with other workloads more reliably.
 

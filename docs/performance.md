@@ -2,6 +2,9 @@
 
 ## Backend Strategy
 
+JAX is the default backend. TensorFlow remains available as the parity reference
+and is selected with `IODOR_BACKEND=tensorflow`.
+
 Use the backends for different goals:
 
 | Goal | Recommended backend | Notes |
@@ -14,7 +17,7 @@ Use the backends for different goals:
 ## Core Environment Variables
 
 ```bash
-export IODOR_BACKEND=jax
+export IODOR_BACKEND=jax          # default; set only to override TensorFlow selection
 export IODOR_JAX_PRECISION=float64
 export JAX_PLATFORM_NAME=gpu
 ```

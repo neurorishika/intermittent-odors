@@ -9,6 +9,28 @@ The standard API for paper-compatible experiments is:
 3. Choose a stimulus builder.
 4. Compile and run.
 
+## `ExperimentSpec` Is the Single Entry Point
+
+Every path into the runtime goes through an `ExperimentSpec`. Build one with
+`build_experiment_spec(...)`, with a stimulus helper such as `build_odor_trial(...)`,
+or with a script-local builder (`fig2/builders.py`, `slurm/builders.py`), then compile it:
+
+```python
+runner = spec.compile(backend="jax")          # or compile_experiment(spec, backend="jax")
+sampled, final_state = runner.run_time_batches(spec.state_vector, spec.current_input)
+```
+
+`spec.compile(...)` is shorthand for `compile_experiment(spec.prepare(), ...)`; both are
+equivalent and either is fine.
+
+!!! note "Legacy config dictionaries"
+
+    `prepare_experiment(...)` and the raw config-dictionary form of
+    `ensure_prepared_experiment(...)` still accept a plain model config. They are
+    internal adapters kept for legacy callers — new code should build an
+    `ExperimentSpec` instead, so that network metadata, thresholds, and the model
+    digest stay attached to the experiment.
+
 ## Using the Repository's Legacy LN-LN Graphs
 
 The repository already ships LN-LN graph CSVs under `modules/networks/`.
